@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import '../../../core/constant/app_string.dart';
-import '../../../core/constant/constant.dart';
 import '../../../data/model/auth/user/user.dart';
 import '../../../shared/app_manager.dart';
-import '../../../shared/app_route.dart';
-import '../../widgets/profile/custom_button_profile.dart';
+import '../../widgets/home/custom_background.dart';
+import '../../widgets/home/list_button.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -28,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
             child: Stack(
               children: [
                 const Column(
-                  children: [_customBackground()],
+                  children: [customBackground()],
                 ),
                 Positioned(
                   top: 170,
@@ -73,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: EdgeInsets.only(left: 20, right: 20),
-                      child: _listButton(),
+                      child: listButton(),
                     ),
                   ),
                 ),
@@ -87,108 +84,3 @@ class ProfileScreen extends StatelessWidget {
 }
 
 
-class _customBackground extends StatelessWidget {
-  const _customBackground({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(255, 74, 74, 1),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(35),
-              bottomRight: Radius.circular(35),
-            ),
-          ),
-          height: 220,
-          width: double.infinity,
-        ),
-        Positioned(
-          left: 90,
-          top: 90,
-          child: Transform(
-            transform: Matrix4.rotationZ(-0.1),
-            child: Image.asset(
-              itemProfile01,
-              height: 100,
-            ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(35),
-            ),
-            child: Image.asset(
-              background_profile,
-              height: 220,
-            ),
-          ),
-        ),
-        Positioned(
-          right: -40,
-          child: Image.asset(
-            itemProfile02,
-            height: 220,
-          ),
-        ),
-        Positioned(
-          left: 90,
-          top: 90,
-          child: Transform(
-            transform: Matrix4.rotationZ(-0.1),
-            child: Image.asset(
-              itemProfile01,
-              height: 100,
-            ),
-          ),
-        ),
-        Positioned(
-          right: -60,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(35),
-            ),
-            child: Image.asset(
-              itemProfile03,
-              height: 220,
-            ),
-          ),
-        ),
-      
-      ],
-    );
-  }
-}
-
-class _listButton extends StatelessWidget {
-  const _listButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CustomBottomProfile(
-          text_button_profile: titleProfile01,
-          onPressed: () {},
-          icon: Icons.person,
-        ),
-        h(10),
-        CustomBottomProfile(
-          text_button_profile: titleProfile02,
-          onPressed: () {
-            Get.toNamed(AppRoute.accountList.name);
-          },
-          icon: Icons.price_change_rounded,
-        ),
-      ],
-    );
-  }
-}
