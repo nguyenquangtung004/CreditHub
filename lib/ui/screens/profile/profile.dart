@@ -1,80 +1,91 @@
-import 'package:credit_hub_app/core/constant/constant.dart';
-import 'package:credit_hub_app/shared/app_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../../core/constant/app_string.dart';
-import '../widgets/profile/custom_button_profile.dart';
+import '../../../core/constant/app_string.dart';
+import '../../../core/constant/constant.dart';
+import '../../../data/model/auth/user/user.dart';
+import '../../../shared/app_manager.dart';
+import '../../../shared/app_route.dart';
+import '../../widgets/profile/custom_button_profile.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.grey.withOpacity(0.1),
-        child: Stack(
-          children: [
-            const Column(
-              children: [_customBackground()],
-            ),
-            Positioned(
-              top: 170,
-              left: 20,
-              right: 20,
-              child: Container(
-                width: 325,
-                height: 87,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+    return FutureBuilder<UserModel>(
+      future: context.read<AppManager>().getUserInfo(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator()); // Hiển thị khi đang tải dữ liệu
+        }
+
+        final user = snapshot.data!;
+
+        return Scaffold(
+          body: Container(
+            color: Colors.grey.withOpacity(0.1),
+            child: Stack(
+              children: [
+                const Column(
+                  children: [_customBackground()],
                 ),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20.0, left: 20.0),
+                Positioned(
+                  top: 170,
+                  left: 20,
+                  right: 20,
                   child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Đại lý đức thịnh",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
+                    width: 325,
+                    height: 87,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 20.0, left: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            user.name.isNotEmpty ? user.name : "Người dùng",
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "DL286",
-                          style: TextStyle(
-                            color: Color.fromRGBO(126, 126, 126, 1),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
+                          Text(
+                            user.username.isNotEmpty ? user.username : "Không có mã đại lý",
+                            style: const TextStyle(
+                              color: Color.fromRGBO(126, 126, 126, 1),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            const Positioned(
-              top: 280,
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: _listButton(),
+                const Positioned(
+                  top: 280,
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: _listButton(),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-              
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
+
 
 class _customBackground extends StatelessWidget {
   const _customBackground({

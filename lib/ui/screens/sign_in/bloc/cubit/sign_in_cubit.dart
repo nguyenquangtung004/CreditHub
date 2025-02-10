@@ -51,7 +51,7 @@ class SignInCubit extends Cubit<SignInState> {
       // STEP 5: Lưu token và thông tin người dùng vào AppManager.
       await appManager.saveToken(response.data!.token);
       await appManager.saveSignedInStatus(true);
-
+     await appManager.saveUserInfo(response.data!);
       // DEBUG: Log thông tin đăng nhập thành công.
       logger.i("✅ Đăng nhập thành công! Token: ${response.data!.token}");
 

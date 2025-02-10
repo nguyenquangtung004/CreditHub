@@ -11,11 +11,8 @@ class UserModel with _$UserModel {
     @Default('') final String username,
     @Default('') final String name,
     @Default('') final String address,
-    @Default('') final String token, // ✅ Ánh xạ chính xác
-    // @JsonKey(name: "branch_name") @Default('') final String branchName,
-    // @JsonKey(name: "email") @Default('') final String email,
-    // @JsonKey(name: "phone") @Default('') final String phone,
-    // @JsonKey(name: "avatar") final String? avatar,
+    @Default('') final String token, 
+
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

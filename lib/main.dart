@@ -15,8 +15,8 @@ import 'data/repository/otp/otp_repo_impl.dart';
 import 'data/service/forgot_password/forgot_password_service.dart';
 import 'data/service/home/home_service.dart';
 import 'data/service/otp/otp_service.dart';
-import 'shared/app_route.dart';
 import 'shared/app_manager.dart';
+import 'shared/app_route.dart';
 import 'ui/screens/forgot_password/cubit/forgot_password_cubit.dart';
 import 'ui/screens/home/cubit/home_cubit.dart';
 import 'ui/screens/otp/cubit/otp_cubit.dart';
@@ -43,6 +43,9 @@ Future<void> main() async {
   runApp(
     MultiRepositoryProvider(
       providers: [
+        RepositoryProvider<AppManager>(
+          create: (context) => AppManager(), // ✅ Thêm AppManager vào Provider
+        ),
         RepositoryProvider<HomeService>(
           create: (context) => HomeService(dio),
         ),
