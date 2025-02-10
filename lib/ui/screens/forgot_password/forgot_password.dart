@@ -80,6 +80,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                                   return;
                                 }
                                 context.read<ForgotPasswordCubit>().sendForgotPasswordRequest(email);
+                                // Get.arguments(AppRoute.enterOtp.name);
                               },
                         height: 48,
                         background: Color(0xFFFF4A4A),

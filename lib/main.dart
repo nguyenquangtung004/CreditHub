@@ -10,12 +10,16 @@ import 'data/_base/network_manager.dart';
 import 'data/repository/forgot_password/forgot_password_rep.dart';
 import 'data/repository/forgot_password/forgot_password_rep_impl.dart';
 import 'data/repository/home/home_rep_impl.dart';
+import 'data/repository/otp/otp_repo.dart';
+import 'data/repository/otp/otp_repo_impl.dart';
 import 'data/service/forgot_password/forgot_password_service.dart';
 import 'data/service/home/home_service.dart';
+import 'data/service/otp/otp_service.dart';
 import 'shared/app_route.dart';
 import 'shared/app_manager.dart';
 import 'ui/screens/forgot_password/cubit/forgot_password_cubit.dart';
 import 'ui/screens/home/cubit/home_cubit.dart';
+import 'ui/screens/otp/cubit/otp_cubit.dart';
 import 'ui/screens/sign_in/sign_in.dart';
 
 Future<void> main() async {
@@ -45,6 +49,9 @@ Future<void> main() async {
         RepositoryProvider<ForgotPassWordService>(
           create: (context) => ForgotPassWordService(dio),
         ),
+        RepositoryProvider<OtpService>(
+          create: (context) => OtpService(dio),
+        ),
         RepositoryProvider<DataRepository>(
           create: (context) => DataRepositoryImpl(
             homeService: context.read<HomeService>(),
@@ -53,6 +60,11 @@ Future<void> main() async {
         RepositoryProvider<ForgotPasswordRepo>(
           create: (context) => ForgotPasswordRepoImpl(
             context.read<ForgotPassWordService>(),
+          ),
+        ),
+        RepositoryProvider<OtpRepository>(
+          create: (context) => OtpRepositoryImpl(
+            context.read<OtpService>(),
           ),
         ),
       ],
@@ -66,6 +78,11 @@ Future<void> main() async {
           BlocProvider<ForgotPasswordCubit>(
             create: (context) => ForgotPasswordCubit(
               context.read<ForgotPasswordRepo>(),
+            ),
+          ),
+          BlocProvider<OtpCubit>(
+            create: (context) => OtpCubit(
+              context.read<OtpRepository>(),
             ),
           ),
         ],
