@@ -8,7 +8,7 @@ import 'package:credit_hub_app/ui/widgets/bottom_navigator/custom_bottom_navigat
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../ui/screens/forgot_password.dart';
+import '../ui/screens/forgot_password/forgot_password.dart';
 import '../ui/screens/sign_in/bloc/cubit/sign_in_cubit.dart';
 import '../ui/screens/sign_in/sign_in.dart'; //NOTE :Thư viện GetX
 

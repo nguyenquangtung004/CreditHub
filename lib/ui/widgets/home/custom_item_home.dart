@@ -2,7 +2,6 @@ import 'package:credit_hub_app/core/constant/app_string.dart';
 import 'package:credit_hub_app/core/constant/constant.dart';
 import 'package:credit_hub_app/shared/app_route.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 
 class CustomItemHome extends StatelessWidget {

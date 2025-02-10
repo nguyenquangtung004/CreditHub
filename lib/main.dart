@@ -1,16 +1,22 @@
-import 'package:credit_hub_app/shared/app_route.dart';
-import 'package:credit_hub_app/ui/screens/sign_in/sign_in.dart';
+import 'package:credit_hub_app/data/repository/home/home_rep.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/constant/constant.dart';
 import 'core/utils/dependencies.dart';
 import 'data/_base/network_manager.dart';
+import 'data/repository/forgot_password/forgot_password_rep.dart';
+import 'data/repository/forgot_password/forgot_password_rep_impl.dart';
 import 'data/repository/home/home_rep_impl.dart';
+import 'data/service/forgot_password/forgot_password_service.dart';
 import 'data/service/home/home_service.dart';
+import 'shared/app_route.dart';
+import 'shared/app_manager.dart';
+import 'ui/screens/forgot_password/cubit/forgot_password_cubit.dart';
 import 'ui/screens/home/cubit/home_cubit.dart';
+import 'ui/screens/sign_in/sign_in.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,24 +33,49 @@ Future<void> main() async {
   provideDependencies();
   final GlobalManager _globalManager = Get.find();
 
-  // ✅ Khởi tạo Dio & Repository
+  // ✅ Khởi tạo Dio
   final dio = NetworkManager().createDio().addInterceptors();
-  final homeService = HomeService(dio);
-  final dataRepository = DataRepositoryImpl(homeService: homeService);
 
   runApp(
-    MultiBlocProvider(
+    MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (context) => HomeCubit(dataRepository: dataRepository)..fetchHomeData(),
+        RepositoryProvider<HomeService>(
+          create: (context) => HomeService(dio),
+        ),
+        RepositoryProvider<ForgotPassWordService>(
+          create: (context) => ForgotPassWordService(dio),
+        ),
+        RepositoryProvider<DataRepository>(
+          create: (context) => DataRepositoryImpl(
+            homeService: context.read<HomeService>(),
+          ),
+        ),
+        RepositoryProvider<ForgotPasswordRepo>(
+          create: (context) => ForgotPasswordRepoImpl(
+            context.read<ForgotPassWordService>(),
+          ),
         ),
       ],
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SignInScreen(),
-        navigatorKey: _globalManager.navigatorKey,
-        initialRoute: AppRoute.signIn.name,
-        onGenerateRoute: AppRouteExt.generateRoute,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<HomeCubit>(
+            create: (context) => HomeCubit(
+              dataRepository: context.read<DataRepository>(),
+            )..fetchHomeData(),
+          ),
+          BlocProvider<ForgotPasswordCubit>(
+            create: (context) => ForgotPasswordCubit(
+              context.read<ForgotPasswordRepo>(),
+            ),
+          ),
+        ],
+        child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SignInScreen(),
+          navigatorKey: _globalManager.navigatorKey,
+          initialRoute: AppRoute.signIn.name,
+          onGenerateRoute: AppRouteExt.generateRoute,
+        ),
       ),
     ),
   );
