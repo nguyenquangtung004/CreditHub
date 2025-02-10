@@ -1,6 +1,7 @@
-import 'package:credit_hub_app/data/model/home/data/data.dart';
+
+import '../../model/home/apiresponse/api_response.dart';
 
 
 abstract class DataRepository {
-  Future<Data> fetchHomeInfo();
+  Future<ApiResponse> fetchHomeInfo();
 }

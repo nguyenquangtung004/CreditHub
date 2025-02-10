@@ -1,5 +1,6 @@
 
-import '../../model/home/data/data.dart';
+import 'package:credit_hub_app/data/model/home/apiresponse/api_response.dart';
+
 import '../../service/home/home_service.dart';
 import 'home_rep.dart';
 
@@ -9,10 +10,10 @@ class DataRepositoryImpl implements DataRepository {
   DataRepositoryImpl({required this.homeService});
 
   @override
-  Future<Data> fetchHomeInfo() async {
+  Future<ApiResponse> fetchHomeInfo() async {
     try {
       final response = await homeService.getHomeInfo();
-      return response.data.data; // Lấy dữ liệu từ API response
+      return response.data; // Lấy dữ liệu từ API response
     } catch (e) {
       throw Exception("Lỗi khi lấy dữ liệu Home: $e");
     }

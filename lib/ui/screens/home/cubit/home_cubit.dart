@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../../../data/model/home/requestitem.dart/request_item.dart';
+import '../../../../data/model/home/apiresponse/api_response.dart';
 import '../../../../data/repository/home/home_rep.dart';
 
 part 'home_state.dart';
@@ -14,10 +13,11 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchHomeData() async {
     emit(HomeLoading());
     try {
-      final data = await dataRepository.fetchHomeInfo();
+      final apiResponse = await dataRepository.fetchHomeInfo(); // ✅ `apiResponse` là `ApiResponse`
+      final data = apiResponse.data; // ✅ Lấy `data` từ `ApiResponse`
 
       emit(HomeLoaded(
-        totalRequest: data.totalRequest,
+        totalRequest: data.totalRequest, // ✅ `totalRequest` có trong `Data`
         totalMoney: data.totalMoney,
         lstRequests: data.lstRequests,
       ));
