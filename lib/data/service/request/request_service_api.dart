@@ -1,3 +1,4 @@
+import 'package:credit_hub_app/data/model/home/request/request_history.dart';
 import 'package:credit_hub_app/data/repository/request/request_repo.dart';
 import 'package:credit_hub_app/data/service/request/request_service.dart';
 
@@ -12,7 +13,7 @@ class RequestServiceApi extends BaseRemoteSource implements RequestRepo {
 
   RequestServiceApi({required this.service});
   @override
-  Future<BaseResponse<PaginationResponse<RequestItem>>> fetchRequestList({required PaginationParams params}) {
+  Future<BaseResponse<PaginationResponse<RequestHistory>>> fetchRequestList({required PaginationParams params}) {
     final response = callApiWithErrorParser(service.fetchDanhSachApi(params)).then(
       (httpResponse) {
         return httpResponse.data; // Trả về dữ liệu từ phản hồi HTTP.

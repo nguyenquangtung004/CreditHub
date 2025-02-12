@@ -14,29 +14,67 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProviderStateMixin {
+class _HistoryScreenState extends State<HistoryScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<String> statusList = ["Tất cả", "Chờ quyết toán", "Không quyết toán", "Đã quyết toán"];
+  late ScrollController _scrollController;
+  bool _isFetchingMore = false; // Tránh gọi API liên tục khi cuộn xuống
+
+  final List<String> statusList = [
+    "Tất cả",
+    "Chờ quyết toán",
+    "Không quyết toán",
+    "Đã quyết toán"
+  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    
+    _scrollController = ScrollController();
+
     /// ✅ Gọi Cubit để tải danh sách ban đầu
     context.read<RequestCubit>().fetchRequestList(1, 10);
-    
+
     /// Lắng nghe thay đổi tab để tải dữ liệu theo trạng thái
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         context.read<RequestCubit>().fetchRequestList(1, 10);
       }
     });
+
+    /// ✅ Thêm lắng nghe sự kiện cuộn để tải dữ liệu trang tiếp theo
+    _scrollController.addListener(_onScroll);
+  }
+
+  /// 📌 Hàm kiểm tra cuộn đến cuối danh sách để tải thêm dữ liệu
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent * 0.8 &&
+        !_isFetchingMore) {
+      final state = context.read<RequestCubit>().state;
+
+      if (state is RequestSuccess) {
+        // ✅ Kiểm tra xem có còn dữ liệu để tải không
+        bool hasMoreData = state.data.data.length < state.data.totalElements; // Sửa lỗi điều kiện
+        
+        if (hasMoreData) {
+          _isFetchingMore = true; // ✅ Đánh dấu đang tải dữ liệu
+          context.read<RequestCubit>().fetchRequestList(
+            state.data.pageNo + 1,
+            state.data.pageSize,
+          ).then((_) {
+            _isFetchingMore = false; // ✅ Đặt lại để có thể tải tiếp
+          });
+        }
+      }
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -107,9 +145,22 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                   if (state is RequestLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is RequestSuccess) {
-                    return CustomListItemHistory(
-                      historyList: state.data.data,
-                      textStatus: statusList[_tabController.index],
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: state.data.data.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == state.data.data.length) {
+                          // 🔥 Nếu đã tải hết dữ liệu, không hiển thị spinner
+                          if (state.data.data.length >= state.data.totalElements) {
+                            return const SizedBox();
+                          }
+
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        return CustomListItemHistory(
+                            historyItem:
+                                state.data.data[index]); // ✅ Hiển thị từng item
+                      },
                     );
                   } else if (state is RequestFailure) {
                     return Center(child: Text(state.error));

@@ -15,7 +15,7 @@ class RequestLoading extends RequestState {}
 
 /// ✅ **Trạng thái tải dữ liệu thành công**
 class RequestSuccess extends RequestState {
-  final PaginationResponse<RequestItem> data;
+  final PaginationResponse<RequestHistory> data;
 
   const RequestSuccess(this.data);
 

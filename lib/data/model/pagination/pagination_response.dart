@@ -15,7 +15,7 @@ class PaginationResponse<T> {
     required this.totalPage,
     required this.pageNo,
     required this.pageSize,
-    required this.data,
+    required this.data, 
   });
 
   /// ✅ **Dùng `fromJson()` để parse dữ liệu JSON**

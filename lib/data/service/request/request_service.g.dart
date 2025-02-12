@@ -22,14 +22,14 @@ class _RequestService implements RequestService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<BaseResponse<PaginationResponse<RequestItem>>>>
+  Future<HttpResponse<BaseResponse<PaginationResponse<RequestHistory>>>>
       fetchDanhSachApi(PaginationParams params) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = params;
     final _options = _setStreamType<
-        HttpResponse<BaseResponse<PaginationResponse<RequestItem>>>>(Options(
+        HttpResponse<BaseResponse<PaginationResponse<RequestHistory>>>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -46,13 +46,13 @@ class _RequestService implements RequestService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse<PaginationResponse<RequestItem>> _value;
+    late BaseResponse<PaginationResponse<RequestHistory>> _value;
     try {
-      _value = BaseResponse<PaginationResponse<RequestItem>>.fromJson(
+      _value = BaseResponse<PaginationResponse<RequestHistory>>.fromJson(
         _result.data!,
-        (json) => PaginationResponse<RequestItem>.fromJson(
+        (json) => PaginationResponse<RequestHistory>.fromJson(
           json as Map<String, dynamic>,
-          (json) => RequestItem.fromJson(json as Map<String, dynamic>),
+          (json) => RequestHistory.fromJson(json as Map<String, dynamic>),
         ),
       );
     } on Object catch (e, s) {
