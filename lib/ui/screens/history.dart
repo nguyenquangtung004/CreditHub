@@ -1,9 +1,11 @@
 import 'package:credit_hub_app/ui/widgets/history/custom_date_picker.dart';
 import 'package:credit_hub_app/ui/widgets/history/custom_list_item_history.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/constant/app_string.dart';
 import '../widgets/history/custom_tab_bar.dart';
+import 'request/cubit/request_cubit.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -14,32 +16,46 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-    @override
+  final List<String> statusList = ["Tất cả", "Chờ quyết toán", "Không quyết toán", "Đã quyết toán"];
+
+  @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    
+    /// ✅ Gọi Cubit để tải danh sách ban đầu
+    context.read<RequestCubit>().fetchRequestList(1, 10);
+    
+    /// Lắng nghe thay đổi tab để tải dữ liệu theo trạng thái
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        context.read<RequestCubit>().fetchRequestList(1, 10);
+      }
+    });
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           textHistory,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.filter_alt_sharp),
+            icon: const Icon(Icons.filter_alt_sharp),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                isScrollControlled: true, // Cho phép điều chỉnh chiều cao modal
+                isScrollControlled: true,
                 builder: (context) {
                   return CustomCalendarWidget(
                     onDateRangeSelected: (selectedDates) {
@@ -58,7 +74,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             // Search bar
@@ -69,7 +85,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                   hintText: 'Search',
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -77,23 +93,30 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                 ),
               ),
             ),
-    
+
             // Tab bar
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: CustomTabBar(tabController: _tabController),
             ),
-    
+
             // Danh sách hiển thị bên dưới tab bar
             Expanded(
-              child: TabBarView(  
-                 controller: _tabController,
-                children: [
-                 CustomListItemHistory(textStatus: "Tất cả",),
-                 CustomListItemHistory(textStatus: "Chờ quyết toán",),
-                 CustomListItemHistory(textStatus: "Không quyết toán",),
-                 CustomListItemHistory(textStatus: "Đã quyết toán",)
-                ],
+              child: BlocBuilder<RequestCubit, RequestState>(
+                builder: (context, state) {
+                  if (state is RequestLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is RequestSuccess) {
+                    return CustomListItemHistory(
+                      historyList: state.data.data,
+                      textStatus: statusList[_tabController.index],
+                    );
+                  } else if (state is RequestFailure) {
+                    return Center(child: Text(state.error));
+                  } else {
+                    return const Center(child: Text("Không có dữ liệu"));
+                  }
+                },
               ),
             ),
           ],
@@ -102,4 +125,3 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
     );
   }
 }
-

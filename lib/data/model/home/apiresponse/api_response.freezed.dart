@@ -720,6 +720,7 @@ mixin _$RequestItem {
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'date_request')
   String get dateRequest => throw _privateConstructorUsedError;
+  String? get image_link => throw _privateConstructorUsedError;
   @JsonKey(name: 'date_request_origin')
   DateTime get dateRequestOrigin => throw _privateConstructorUsedError;
   @JsonKey(name: 'lot_no')
@@ -745,6 +746,7 @@ abstract class $RequestItemCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(name: 'date_request') String dateRequest,
+      String? image_link,
       @JsonKey(name: 'date_request_origin') DateTime dateRequestOrigin,
       @JsonKey(name: 'lot_no') String lotNo,
       @JsonKey(name: 'money_request') double moneyRequest,
@@ -767,6 +769,7 @@ class _$RequestItemCopyWithImpl<$Res, $Val extends RequestItem>
   $Res call({
     Object? id = null,
     Object? dateRequest = null,
+    Object? image_link = freezed,
     Object? dateRequestOrigin = null,
     Object? lotNo = null,
     Object? moneyRequest = null,
@@ -782,6 +785,10 @@ class _$RequestItemCopyWithImpl<$Res, $Val extends RequestItem>
           ? _value.dateRequest
           : dateRequest // ignore: cast_nullable_to_non_nullable
               as String,
+      image_link: freezed == image_link
+          ? _value.image_link
+          : image_link // ignore: cast_nullable_to_non_nullable
+              as String?,
       dateRequestOrigin: null == dateRequestOrigin
           ? _value.dateRequestOrigin
           : dateRequestOrigin // ignore: cast_nullable_to_non_nullable
@@ -817,6 +824,7 @@ abstract class _$$RequestItemImplCopyWith<$Res>
   $Res call(
       {int id,
       @JsonKey(name: 'date_request') String dateRequest,
+      String? image_link,
       @JsonKey(name: 'date_request_origin') DateTime dateRequestOrigin,
       @JsonKey(name: 'lot_no') String lotNo,
       @JsonKey(name: 'money_request') double moneyRequest,
@@ -837,6 +845,7 @@ class __$$RequestItemImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? dateRequest = null,
+    Object? image_link = freezed,
     Object? dateRequestOrigin = null,
     Object? lotNo = null,
     Object? moneyRequest = null,
@@ -852,6 +861,10 @@ class __$$RequestItemImplCopyWithImpl<$Res>
           ? _value.dateRequest
           : dateRequest // ignore: cast_nullable_to_non_nullable
               as String,
+      image_link: freezed == image_link
+          ? _value.image_link
+          : image_link // ignore: cast_nullable_to_non_nullable
+              as String?,
       dateRequestOrigin: null == dateRequestOrigin
           ? _value.dateRequestOrigin
           : dateRequestOrigin // ignore: cast_nullable_to_non_nullable
@@ -882,6 +895,7 @@ class _$RequestItemImpl implements _RequestItem {
   const _$RequestItemImpl(
       {required this.id,
       @JsonKey(name: 'date_request') required this.dateRequest,
+      this.image_link = '',
       @JsonKey(name: 'date_request_origin') required this.dateRequestOrigin,
       @JsonKey(name: 'lot_no') required this.lotNo,
       @JsonKey(name: 'money_request') required this.moneyRequest,
@@ -896,6 +910,9 @@ class _$RequestItemImpl implements _RequestItem {
   @override
   @JsonKey(name: 'date_request')
   final String dateRequest;
+  @override
+  @JsonKey()
+  final String? image_link;
   @override
   @JsonKey(name: 'date_request_origin')
   final DateTime dateRequestOrigin;
@@ -913,7 +930,7 @@ class _$RequestItemImpl implements _RequestItem {
 
   @override
   String toString() {
-    return 'RequestItem(id: $id, dateRequest: $dateRequest, dateRequestOrigin: $dateRequestOrigin, lotNo: $lotNo, moneyRequest: $moneyRequest, status: $status, statusName: $statusName)';
+    return 'RequestItem(id: $id, dateRequest: $dateRequest, image_link: $image_link, dateRequestOrigin: $dateRequestOrigin, lotNo: $lotNo, moneyRequest: $moneyRequest, status: $status, statusName: $statusName)';
   }
 
   @override
@@ -924,6 +941,8 @@ class _$RequestItemImpl implements _RequestItem {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.dateRequest, dateRequest) ||
                 other.dateRequest == dateRequest) &&
+            (identical(other.image_link, image_link) ||
+                other.image_link == image_link) &&
             (identical(other.dateRequestOrigin, dateRequestOrigin) ||
                 other.dateRequestOrigin == dateRequestOrigin) &&
             (identical(other.lotNo, lotNo) || other.lotNo == lotNo) &&
@@ -936,7 +955,7 @@ class _$RequestItemImpl implements _RequestItem {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, dateRequest,
+  int get hashCode => Object.hash(runtimeType, id, dateRequest, image_link,
       dateRequestOrigin, lotNo, moneyRequest, status, statusName);
 
   @JsonKey(ignore: true)
@@ -957,6 +976,7 @@ abstract class _RequestItem implements RequestItem {
   const factory _RequestItem(
           {required final int id,
           @JsonKey(name: 'date_request') required final String dateRequest,
+          final String? image_link,
           @JsonKey(name: 'date_request_origin')
           required final DateTime dateRequestOrigin,
           @JsonKey(name: 'lot_no') required final String lotNo,
@@ -973,6 +993,8 @@ abstract class _RequestItem implements RequestItem {
   @override
   @JsonKey(name: 'date_request')
   String get dateRequest;
+  @override
+  String? get image_link;
   @override
   @JsonKey(name: 'date_request_origin')
   DateTime get dateRequestOrigin;

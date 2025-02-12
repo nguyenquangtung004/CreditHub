@@ -50,6 +50,7 @@ class RequestItem with _$RequestItem {
   const factory RequestItem({
     required int id,
     @JsonKey(name: 'date_request') required String dateRequest,
+    @Default('') final String? image_link,
     @JsonKey(name: 'date_request_origin') required DateTime dateRequestOrigin,
     @JsonKey(name: 'lot_no') required String lotNo,
     @JsonKey(name: 'money_request') required double moneyRequest,
