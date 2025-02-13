@@ -1,5 +1,4 @@
 import 'package:credit_hub_app/core/constant/app_color.dart';
-import 'package:credit_hub_app/data/model/home/apiresponse/api_response.dart';
 import 'package:credit_hub_app/data/model/home/request/request_history.dart';
 import 'package:credit_hub_app/ui/widgets/history/custom_item_history.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ class CustomListItemHistory extends StatelessWidget {
         );
 
     return CustomItemHistory(
+      id: historyItem.id, 
       textstatus: historyItem.statusNameHistory, // 🌟 Lấy từ API
       lotNumber: historyItem.lotNoHistory, // 🌟 Lấy từ API
       dateRequest: historyItem.dateRequestHistory, // 🌟 Lấy từ API

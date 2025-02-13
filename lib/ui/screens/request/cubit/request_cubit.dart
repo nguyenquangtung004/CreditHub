@@ -15,7 +15,8 @@ class RequestCubit extends Cubit<RequestState> {
   RequestCubit(this.requestRepo) : super(RequestInitial());
 
   /// ✅ **Hàm fetch danh sách RequestItem với phân trang**
-  Future<void> fetchRequestList(int pageNo, int pageSize, {bool isNewApi = false}) async {
+  Future<void> fetchRequestList(int pageNo, int pageSize,
+      {bool isNewApi = false}) async {
     if (_isFetchingMore) return; // ✅ Tránh gọi API nhiều lần cùng lúc
     _isFetchingMore = true;
 
@@ -34,13 +35,18 @@ class RequestCubit extends Cubit<RequestState> {
       if (response.data != null) {
         final newData = response.data!.data;
 
+        // 🔥 Lấy danh sách ID từ `newData`
+        List<int> requestIds = newData.map((item) => item.id).toList();
+
         List<RequestHistory> updatedList = newData;
 
-        // ✅ Nếu là API mới, xóa dữ liệu cũ để tránh trộn API A & API B
         if (isNewApi || state is! RequestSuccess || pageNo == 1) {
           updatedList = newData;
         } else {
-          updatedList = [...(state as RequestSuccess).data.data, ...newData]; // ✅ Hợp nhất danh sách
+          updatedList = [
+            ...(state as RequestSuccess).data.data,
+            ...newData
+          ]; // ✅ Hợp nhất danh sách
         }
 
         emit(RequestSuccess(
@@ -51,6 +57,7 @@ class RequestCubit extends Cubit<RequestState> {
             pageSize: pageSize,
             data: updatedList,
           ),
+          requestIds, // ✅ Truyền requestIds vào state
         ));
       } else {
         emit(RequestFailure("Dữ liệu từ API bị null"));
@@ -59,6 +66,23 @@ class RequestCubit extends Cubit<RequestState> {
       emit(RequestFailure("Lỗi khi tải dữ liệu: $e"));
     } finally {
       _isFetchingMore = false; // ✅ Đặt lại để tiếp tục gọi API khi cuộn
+    }
+  }
+
+  /// ✅ **Hàm fetch chi tiết RequestItem bằng requestId**
+  Future<void> fetchRequestDetail(int requestId) async {
+    try {
+      emit(RequestLoading());
+
+      final response = await requestRepo.fetchRequestDetail(requestId);
+
+      if (response.data != null) {
+        emit(RequestDetailSuccess(response.data!));
+      } else {
+        emit(RequestFailure("Không tìm thấy chi tiết yêu cầu"));
+      }
+    } catch (e) {
+      emit(RequestFailure("Lỗi: ${e.toString()}"));
     }
   }
 }

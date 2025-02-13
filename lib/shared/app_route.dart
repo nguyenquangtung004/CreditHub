@@ -1,7 +1,7 @@
 import 'package:credit_hub_app/ui/screens/add_account.dart';
 import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
-import 'package:credit_hub_app/ui/screens/detail_request.dart';
-import 'package:credit_hub_app/ui/screens/history.dart';
+import 'package:credit_hub_app/ui/screens/detail/detail_request.dart';
+import 'package:credit_hub_app/ui/screens/request/history.dart';
 import 'package:credit_hub_app/ui/screens/list_account_screen.dart';
 import 'package:credit_hub_app/ui/screens/otp/otp_screen.dart';
 import 'package:credit_hub_app/ui/widgets/bottom_navigator/custom_bottom_navigator.dart';
@@ -182,12 +182,8 @@ extension AppRouteExt on AppRoute {
             settings.arguments as Map<String, dynamic>?;
         return GetPageRoute(
           settings: settings,
-          page: () => DetailRequestScreen(
-            textstatus: args?['textstatus'] ?? '',
-            lotNumber: args?['lotNumber'] ?? '',
-            dateRequest: args?['dateRequest'] ?? '',
-            lotPrice: args?['lotPrice'] ?? '',
-            imageBill: args?['imageBill'],
+          page: () => DetailRequestScreen(requestId: args?["requestId"], // ✅ Nhận requestId từ arguments
+         
           ),
           bindings: [
             // BindingsBuilder.put(() => AccountCubit(Get.find())),

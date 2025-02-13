@@ -48,28 +48,6 @@ class RequestRepoImpl implements RequestRepo {
     }
   }
 
-  /// ✅ **Upload một ảnh lên server**
-  // @override
-  // Future<String> uploadImage(File file) async {
-  //   try {
-  //     final multipartFile = await MultipartFile.fromFile(
-  //       file.path,
-  //       filename: file.path.split('/').last,
-  //       contentType: MediaType("image", "jpeg"), // ✅ Đảm bảo đúng Content-Type
-  //     );
-
-  //     final httpResponse = await requestService.uploadImage(multipartFile);
-
-  //     if (httpResponse.response.statusCode == 200 && httpResponse.data.data != null) {
-  //       return httpResponse.data.data!;
-  //     } else {
-  //       throw Exception("Lỗi khi tải ảnh lên server!");
-  //     }
-  //   } catch (e) {
-  //     throw Exception("❌ Lỗi upload ảnh: $e");
-  //   }
-  // }
-
   /// ✅ **Upload nhiều ảnh lên server**
   @override
   Future<List<String>> uploadMultipleImages(List<File> files) async {
@@ -86,7 +64,8 @@ class RequestRepoImpl implements RequestRepo {
       );
 
       // ✅ Gửi danh sách file trực tiếp qua API Retrofit
-      final response = await requestService.uploadMultipleImages(multipartFiles);
+      final response =
+          await requestService.uploadMultipleImages(multipartFiles);
 
       if (response.response.statusCode == 200 && response.data.data != null) {
         return response.data.data!;
@@ -95,6 +74,22 @@ class RequestRepoImpl implements RequestRepo {
       }
     } catch (e) {
       throw Exception("❌ Lỗi upload nhiều ảnh: $e");
+    }
+  }
+
+   /// ✅ **Lấy chi tiết request item từ API**
+  @override
+  Future<BaseResponse<RequestHistory>> fetchRequestDetail(int requestId) async {
+    try {
+      final httpResponse = await requestService.fetchRequestDetail(requestId);
+
+      if (httpResponse.response.statusCode == 200) {
+        return httpResponse.data;
+      } else {
+        throw Exception('API Error: ${httpResponse.response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Lỗi khi fetch request detail: $e');
     }
   }
 }

@@ -21,4 +21,7 @@ abstract class RequestRepo {
 
   /// ✅ **Gửi request item lên server**
   Future<BaseResponse<bool>> addRequestItem(AddWithout requestItem);
+
+   /// ✅ **Lấy chi tiết request item từ API theo requestId**
+  Future<BaseResponse<RequestHistory>> fetchRequestDetail(int requestId);
 }

@@ -1,5 +1,5 @@
 import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
-import 'package:credit_hub_app/ui/screens/history.dart';
+import 'package:credit_hub_app/ui/screens/request/history.dart';
 import 'package:credit_hub_app/ui/screens/home/home.dart';
 import 'package:credit_hub_app/ui/screens/notfication.dart';
 import 'package:credit_hub_app/ui/screens/profile/profile.dart';

@@ -3,9 +3,9 @@ import 'package:credit_hub_app/ui/widgets/history/custom_list_item_history.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/constant/app_string.dart';
-import '../widgets/history/custom_tab_bar.dart';
-import 'request/cubit/request_cubit.dart';
+import '../../../core/constant/app_string.dart';
+import '../../widgets/history/custom_tab_bar.dart';
+import 'cubit/request_cubit.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -140,6 +140,7 @@ class _HistoryScreenState extends State<HistoryScreen>
 
             // Danh sách hiển thị bên dưới tab bar
             Expanded(
+              
               child: BlocBuilder<RequestCubit, RequestState>(
                 builder: (context, state) {
                   if (state is RequestLoading) {

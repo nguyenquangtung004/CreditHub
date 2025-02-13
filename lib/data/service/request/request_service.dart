@@ -28,4 +28,11 @@ abstract class RequestService {
     @Part(name: "files")
     List<MultipartFile> files,
   );
+
+  /// ✅ **Gọi API chi tiết request item theo requestId**
+  @GET('/app/requestmoneyorder/detail/{id}')
+  Future<HttpResponse<BaseResponse<RequestHistory>>> fetchRequestDetail(
+    @Path("id") int requestId,
+  );
+
 }

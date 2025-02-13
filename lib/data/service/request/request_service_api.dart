@@ -33,6 +33,14 @@ class RequestServiceApi extends BaseRemoteSource implements RequestRepo {
     );
   }
 
+  /// ✅ **Gọi API để lấy chi tiết request item theo requestId**
+  @override
+  Future<BaseResponse<RequestHistory>> fetchRequestDetail(int requestId) {
+    return callApiWithErrorParser(service.fetchRequestDetail(requestId)).then(
+      (httpResponse) => httpResponse.data,
+    );
+  }
+
   /// ✅ Gọi API để upload nhiều ảnh
   @override
   Future<List<String>> uploadMultipleImages(List<File> files) async {
