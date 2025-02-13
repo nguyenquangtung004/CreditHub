@@ -15,10 +15,12 @@ class AddWithDrawalRequestScreen extends StatefulWidget {
   const AddWithDrawalRequestScreen({super.key});
 
   @override
-  State<AddWithDrawalRequestScreen> createState() => _AddWithDrawalRequestScreenState();
+  State<AddWithDrawalRequestScreen> createState() =>
+      _AddWithDrawalRequestScreenState();
 }
 
-class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen> {
+class _AddWithDrawalRequestScreenState
+    extends State<AddWithDrawalRequestScreen> {
   final TextEditingController _lotNoController = TextEditingController();
   final TextEditingController _moneyRequestController = TextEditingController();
   File? _selectedImage; // Ảnh đã chọn
@@ -28,55 +30,52 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
 
   /// ✅ Chọn ảnh từ thư viện hoặc chụp ảnh và tải lên server ngay lập tức
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source, imageQuality: 80);
+  final pickedFile = await _picker.pickImage(source: source, imageQuality: 80);
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-        _isUploading = true; // Bắt đầu tải ảnh lên
-      });
+  if (pickedFile != null) {
+    setState(() {
+      _selectedImage = File(pickedFile.path);
+    });
 
-      // ✅ Gọi API upload ảnh ngay lập tức
-      await _uploadImageToServer();
-    }
+    // ✅ Gọi API upload ảnh ngay lập tức mà không hiển thị loading
+    _uploadImageToServer();
   }
+}
 
   /// ✅ Gọi API upload ảnh, nhận về URL và trích xuất tên file
+  /// ✅ Gọi API upload ảnh, nhận về URL và trích xuất tên file
   Future<void> _uploadImageToServer() async {
-    if (_selectedImage == null) return;
+  if (_selectedImage == null) return;
 
-    try {
-      final imageUrls = await context.read<AddWithdrawalRequestCubit>().uploadImages([_selectedImage!]);
+  try {
+    final imageUrls = await context.read<AddWithdrawalRequestCubit>().uploadImages([_selectedImage!]);
 
-      if (imageUrls.isNotEmpty) {
-        // ✅ Lấy tên file từ URL
-        Uri uri = Uri.parse(imageUrls.first);
-        String fileName = uri.pathSegments.last;
+    if (imageUrls.isNotEmpty) {
+      // ✅ Lấy tên file từ URL
+      Uri uri = Uri.parse(imageUrls.first);
+      String fileName = uri.pathSegments.last;
 
-        setState(() {
-          _uploadedImageName = fileName;
-          _isUploading = false; // Kết thúc tải ảnh
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("📷 Ảnh đã tải lên thành công: $_uploadedImageName")),
-        );
-      }
-    } catch (e) {
       setState(() {
-        _isUploading = false; // Kết thúc tải ảnh dù có lỗi
+        _uploadedImageName = fileName; // ✅ Lưu tên file để gửi lên API
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("❌ Lỗi upload ảnh: $e")),
+        SnackBar(content: Text("📷 Ảnh đã tải lên thành công: $_uploadedImageName")),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("❌ Lỗi upload ảnh: $e")),
+    );
   }
+}
 
+  /// ✅ Gửi yêu cầu rút tiền lên server
   /// ✅ Gửi yêu cầu rút tiền lên server
   void _submitRequest() {
     final lotNo = _lotNoController.text.trim();
-    final moneyRequest = double.tryParse(_moneyRequestController.text.trim()) ?? 0.0;
+    final moneyRequest =
+        double.tryParse(_moneyRequestController.text.trim()) ?? 0.0;
 
     if (lotNo.isEmpty || moneyRequest <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -85,15 +84,19 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
       return;
     }
 
+    setState(() {
+      _isUploading = true; // ✅ Bắt đầu loading khi gửi request
+    });
+
     final request = AddWithout(
       lot_no: lotNo,
       money_request: moneyRequest,
-      image_link: _uploadedImageName ?? "", // ✅ Gửi tên file thay vì toàn bộ URL
+      image_link: _uploadedImageName ?? "", // ✅ Gửi URL ảnh
     );
 
     context.read<AddWithdrawalRequestCubit>().addWithdrawalRequest(
-      requestItem: request,
-    );
+          requestItem: request,
+        );
   }
 
   @override
@@ -104,7 +107,8 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
         centerTitle: true,
         title: const Text(
           textAddWithdrawal,
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black),
+          style: TextStyle(
+              fontWeight: FontWeight.w400, fontSize: 18, color: Colors.black),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -119,13 +123,20 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
             );
           } else if (state is Success) {
             Navigator.pop(context);
+            setState(() {
+              _isUploading = false; // ✅ Dừng loading khi thành công
+            });
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Gửi yêu cầu rút tiền thành công!")),
+              SnackBar(content: Text("✅ Gửi yêu cầu rút tiền thành công!")),
+              
             );
           } else if (state is Failure) {
             Navigator.pop(context);
+            setState(() {
+              _isUploading = false; // ✅ Dừng loading khi lỗi xảy ra
+            });
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Lỗi: ${state.error}")),
+              SnackBar(content: Text("❌ Lỗi: ${state.error}")),
             );
           }
         },
@@ -136,7 +147,8 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
               h(20),
               const Row(
                 children: [
-                  CustomRichText(textTitle: richTextTitleLot, textTitle01: richTextTitle01)
+                  CustomRichText(
+                      textTitle: richTextTitleLot, textTitle01: richTextTitle01)
                 ],
               ),
               h(10),
@@ -147,7 +159,9 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
               h(22),
               const Row(
                 children: [
-                  CustomRichText(textTitle: richTextTitlePrice, textTitle01: richTextTitle01)
+                  CustomRichText(
+                      textTitle: richTextTitlePrice,
+                      textTitle01: richTextTitle01)
                 ],
               ),
               h(10),
@@ -158,14 +172,17 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
               h(22),
               const Row(
                 children: [
-                  CustomRichText(textTitle: richTextImage, textTitle01: richTextTitle01)
+                  CustomRichText(
+                      textTitle: richTextImage, textTitle01: richTextTitle01)
                 ],
               ),
               h(22),
               GestureDetector(
                 onTap: () => _showImagePickerOptions(),
                 child: _isUploading
-                    ? const Center(child: CircularProgressIndicator()) // ✅ Hiển thị loading khi đang tải ảnh
+                    ? const Center(
+                        child:
+                            CircularProgressIndicator()) // ✅ Hiển thị loading khi đang tải ảnh
                     : _selectedImage == null
                         ? const DottedBorderBox() // ✅ Hiển thị nút chọn ảnh nếu chưa chọn
                         : Image.file(
@@ -183,14 +200,18 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
                   onPressed: _submitRequest,
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFFFF4A4A),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 20),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(32.5),
                     ),
                   ),
                   child: const Text(
                     "Gửi Yêu Cầu",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
               ),
