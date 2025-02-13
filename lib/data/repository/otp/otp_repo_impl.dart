@@ -13,7 +13,7 @@ class OtpRepositoryImpl implements OtpRepository {
   Future<bool> verifyOtp(OtpModel otpModel) async {
     try {
       final response = await otpService.verifyOtp(otpModel);
-
+      print('Dữ liệu response otp : $response');
       if (response.response.statusCode == 200) {
         return true;
       } else {
@@ -25,4 +25,23 @@ class OtpRepositoryImpl implements OtpRepository {
       throw Exception("Lỗi không xác định: $e");
     }
   }
+
+  
+  @override
+  Future<bool> changeForgotBrand(OtpModel otpModel)async {
+    try {
+      final response = await otpService.verifyOtp(otpModel);
+      print('Dữ liệu response otp : $response');
+      if (response.response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception("Lỗi xác minh OTP: ${response.data.message}");
+      }
+    } on DioException catch (e) {
+      throw Exception("Lỗi mạng: ${e.response?.statusMessage ?? e.message}");
+    } catch (e) {
+      throw Exception("Lỗi không xác định: $e");
+    }
+  }
+
 }

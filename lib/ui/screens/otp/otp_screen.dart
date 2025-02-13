@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../core/constant/app_string.dart';
 import '../../../core/constant/constant.dart';
-import '../../../core/utils/ext_string.dart';
 import '../../../data/repository/otp/otp_repo.dart';
 import 'cubit/otp_cubit.dart';
 import 'cubit/otp_state.dart';
@@ -15,16 +14,16 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String email = Get.arguments ?? "Email không xác định";
-    String maskedEmail = maskEmail(email);
-
+    final String email =
+        Get.arguments ?? "Email không xác định"; // ✅ Lấy email từ Get.arguments
+    print('Lấy từ email argument:$email');
     return BlocProvider(
-      create: (context) => OtpCubit(context.read<OtpRepository>()),
+      create: (context) =>
+          OtpCubit(context.read<OtpRepository>(), email: email),
       child: Scaffold(
         body: BlocConsumer<OtpCubit, OtpState>(
           listener: (context, state) {
             if (state is OtpSuccess) {
-              Get.offNamed('/reset-password');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("✅ Xác minh OTP thành công!")),
               );
@@ -62,7 +61,7 @@ class OtpScreen extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: maskedEmail,
+                            text: email,
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,

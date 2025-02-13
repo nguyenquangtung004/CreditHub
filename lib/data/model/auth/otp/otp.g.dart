@@ -8,10 +8,14 @@ part of 'otp.dart';
 
 _$OtpModelImpl _$$OtpModelImplFromJson(Map<String, dynamic> json) =>
     _$OtpModelImpl(
-      otp: json['otp'] as String? ?? '',
+      otp: json['otp_code'] as String?,
+      email: json['email'] as String?,
+      newPassword: json['new_password'] as String?,
     );
 
 Map<String, dynamic> _$$OtpModelImplToJson(_$OtpModelImpl instance) =>
     <String, dynamic>{
-      'otp': instance.otp,
+      'otp_code': instance.otp,
+      'email': instance.email,
+      'new_password': instance.newPassword,
     };

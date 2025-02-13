@@ -13,4 +13,11 @@ abstract class OtpService {
   Future<HttpResponse<BaseResponse<dynamic>>> verifyOtp(
     @Body() OtpModel otpModel
   );
+
+  @POST('app/auth/changePassForgetBrand')
+  Future<HttpResponse<BaseResponse<dynamic>>> changePassword(
+    @Body() OtpModel otpModel
+  );
+
+  
 }

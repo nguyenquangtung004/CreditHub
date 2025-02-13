@@ -94,7 +94,10 @@ Future<void> main() async {
                 ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
           ),
           BlocProvider<OtpCubit>(
-            create: (context) => OtpCubit(context.read<OtpRepository>()),
+              create: (context) {
+    final String email = Get.arguments ?? ''; // Lấy email từ màn trước (nếu có)
+    return OtpCubit(context.read<OtpRepository>(), email: email);
+  },
           ),
           BlocProvider<RequestCubit>(
             create: (context) => RequestCubit(

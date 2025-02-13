@@ -31,8 +31,9 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
           child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
             listener: (context, state) {
               if (state is ForgotPasswordSuccess) {
+                final email = emailController.text.trim();
                 print("✅ Yêu cầu đặt lại mật khẩu thành công!");
-                Get.toNamed(AppRoute.enterOtp.name);
+                Get.toNamed(AppRoute.enterOtp.name, arguments: email);
               } else if (state is ForgotPasswordError) {
                 print("❌ Lỗi: ${state.message}");
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -79,6 +80,8 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                                   );
                                   return;
                                 }
+                                  print("📌 Gửi yêu cầu quên mật khẩu với email: $email"); // Debug log
+
                                 context.read<ForgotPasswordCubit>().sendForgotPasswordRequest(email);
                                 // Get.arguments(AppRoute.enterOtp.name);
                               },
