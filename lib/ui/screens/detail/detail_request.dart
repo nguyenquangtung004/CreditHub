@@ -74,7 +74,7 @@ class DetailRequestScreen extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.network(
-                            requestDetail.imageLinkHistory,
+                            "http://credithubapi.tasvietnam.vn/download/credithub/${requestDetail.imageLinkHistory}",
                             fit: BoxFit.cover,
                           ),
                         ),
