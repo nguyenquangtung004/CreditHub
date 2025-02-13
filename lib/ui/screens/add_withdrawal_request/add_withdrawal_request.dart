@@ -48,11 +48,12 @@ class _AddWithDrawalRequestScreenState
   if (_selectedImage == null) return;
 
   try {
-    final imageUrls = await context.read<AddWithdrawalRequestCubit>().uploadImages([_selectedImage!]);
+    final imageUrl = await context.read<AddWithdrawalRequestCubit>().uploadImage(_selectedImage!);
 
-    if (imageUrls.isNotEmpty) {
-      // ✅ Lấy tên file từ URL
-      Uri uri = Uri.parse(imageUrls.first);
+
+   if (imageUrl != null && imageUrl.isNotEmpty) {
+  Uri uri = Uri.parse(imageUrl);
+
       String fileName = uri.pathSegments.last;
 
       setState(() {
