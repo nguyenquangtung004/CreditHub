@@ -17,6 +17,7 @@ import 'data/service/home/home_service.dart'; // Nhập service HomeService
 import 'data/service/otp/otp_service.dart'; // Nhập service OtpService
 import 'shared/app_manager.dart'; // Nhập AppManager để quản lý các thông tin toàn cục của ứng dụng
 import 'shared/app_route.dart'; // Nhập AppRoute để quản lý routing của ứng dụng
+import 'ui/screens/add_withdrawal_request/cubit/add_withdrawal_request_cubit.dart';
 import 'ui/screens/forgot_password/cubit/forgot_password_cubit.dart'; // Nhập Cubit ForgotPasswordCubit
 import 'ui/screens/home/cubit/home_cubit.dart'; // Nhập Cubit HomeCubit
 import 'ui/screens/otp/cubit/otp_cubit.dart'; // Nhập Cubit OtpCubit
@@ -24,7 +25,7 @@ import 'ui/screens/request/cubit/request_cubit.dart';
 import 'ui/screens/sign_in/sign_in.dart'; // Nhập màn hình SignInScreen
 
 // 🔥 THÊM CÁC IMPORT LIÊN QUAN ĐẾN `RequestCubit`
-import 'data/repository/request/request_repo.dart'; 
+import 'data/repository/request/request_repo.dart';
 import 'data/repository/request/request_repo_impl.dart';
 import 'data/service/request/request_service.dart';
 
@@ -56,38 +57,55 @@ Future<void> main() async {
 
         /// ✅ **Cấu hình Service**
         RepositoryProvider<HomeService>(create: (context) => HomeService(dio)),
-        RepositoryProvider<ForgotPassWordService>(create: (context) => ForgotPassWordService(dio)),
+        RepositoryProvider<ForgotPassWordService>(
+            create: (context) => ForgotPassWordService(dio)),
         RepositoryProvider<OtpService>(create: (context) => OtpService(dio)),
-        RepositoryProvider<RequestService>(create: (context) => RequestService(dio)), // 🔥 Thêm RequestService
+        RepositoryProvider<RequestService>(
+            create: (context) => RequestService(dio)), // 🔥 Thêm RequestService
 
         /// ✅ **Cấu hình Repository**
         RepositoryProvider<DataRepository>(
-          create: (context) => DataRepositoryImpl(homeService: context.read<HomeService>()),
+          create: (context) =>
+              DataRepositoryImpl(homeService: context.read<HomeService>()),
         ),
         RepositoryProvider<ForgotPasswordRepo>(
-          create: (context) => ForgotPasswordRepoImpl(context.read<ForgotPassWordService>()),
+          create: (context) =>
+              ForgotPasswordRepoImpl(context.read<ForgotPassWordService>()),
         ),
         RepositoryProvider<OtpRepository>(
           create: (context) => OtpRepositoryImpl(context.read<OtpService>()),
         ),
         RepositoryProvider<RequestRepo>(
-          create: (context) => RequestRepoImpl(requestService: context.read<RequestService>()), // 🔥 Thêm RequestRepo
+          create: (context) => RequestRepoImpl(
+              requestService:
+                  context.read<RequestService>()), // 🔥 Thêm RequestRepo
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           /// ✅ **Cấu hình Cubit**
           BlocProvider<HomeCubit>(
-            create: (context) => HomeCubit(dataRepository: context.read<DataRepository>())..fetchHomeData(),
+            create: (context) =>
+                HomeCubit(dataRepository: context.read<DataRepository>())
+                  ..fetchHomeData(),
           ),
           BlocProvider<ForgotPasswordCubit>(
-            create: (context) => ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
+            create: (context) =>
+                ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
           ),
           BlocProvider<OtpCubit>(
             create: (context) => OtpCubit(context.read<OtpRepository>()),
           ),
           BlocProvider<RequestCubit>(
-            create: (context) => RequestCubit(context.read<RequestRepo>()), // 🔥 Thêm RequestCubit
+            create: (context) => RequestCubit(
+                context.read<RequestRepo>()), // 🔥 Thêm RequestCubit
+          ),
+          BlocProvider<RequestCubit>(
+            create: (context) => RequestCubit(context.read<RequestRepo>()),
+          ),
+          BlocProvider<AddWithdrawalRequestCubit>(
+            create: (context) => AddWithdrawalRequestCubit(
+                requestRepo: context.read<RequestRepo>()),
           ),
         ],
         child: GetMaterialApp(
