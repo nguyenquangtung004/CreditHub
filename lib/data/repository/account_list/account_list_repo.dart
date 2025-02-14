@@ -3,4 +3,5 @@ import 'package:credit_hub_app/data/model/bank/bank_model.dart';
 
 abstract class AccountListRepo {
     Future< BaseResponse<List<BankModel>>> fetchBank ();
+   Future<BaseResponse<bool>> addAccountBank(Map<String, dynamic> accountData);
 }

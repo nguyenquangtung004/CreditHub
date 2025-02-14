@@ -16,4 +16,13 @@ class AccountListRepoImpl implements AccountListRepo {
       throw Exception("Lỗi khi lấy danh sách ngân hàng: $e");
     }
   }
+   /// ✅ Thêm chức năng thêm tài khoản ngân hàng
+  @override
+  Future<BaseResponse<bool>> addAccountBank(Map<String, dynamic> accountData) async {
+    try {
+      return await accountServiceApi.addAccountBank(accountData); // ✅ Gọi API từ AccountServiceApi
+    } catch (e) {
+      throw Exception("Lỗi khi thêm tài khoản ngân hàng: $e");
+    }
+  }
 }

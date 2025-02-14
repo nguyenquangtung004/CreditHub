@@ -27,58 +27,61 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
   String selectedBankText = "Techcombank";
 
   /// Mở Bottom Sheet chọn ngân hàng sử dụng Cubit để lấy dữ liệu từ API
-void _showBankSelectionSheet(BuildContext context) async {
-  print("🟡 Mở BankSelectionSheet...");
+  int? selectedBankId; // ✅ Lưu ID của ngân hàng đã chọn
 
-  final addAccountCubit = context.read<AddAccountCubit>();
+  void _showBankSelectionSheet(BuildContext context) async {
+    print("🟡 Mở BankSelectionSheet...");
 
-  // Đảm bảo dữ liệu đã tải xong trước khi mở BottomSheet
-  if (addAccountCubit.state is! BankLoaded) {
-    print("❌ Không có dữ liệu ngân hàng, gọi API...");
-    await addAccountCubit.fetchBank();
+    final addAccountCubit = context.read<AddAccountCubit>();
+
+    if (addAccountCubit.state is! BankLoaded) {
+      print("❌ Không có dữ liệu ngân hàng, gọi API...");
+      await addAccountCubit.fetchBank();
+    }
+
+    final state = addAccountCubit.state;
+    if (state is! BankLoaded) {
+      print("⚠️ Vẫn không có dữ liệu sau khi gọi API!");
+      return;
+    }
+
+    final banks = state.banks;
+    print("✅ Danh sách ngân hàng trước khi mở BottomSheet: ${banks.length}");
+
+    final selectedId = await showModalBottomSheet<int>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return BlocProvider.value(
+          value: addAccountCubit,
+          child: BankSelectionSheet(
+            selectedBank: selectedBankText,
+            banks: banks,
+          ),
+        );
+      },
+    );
+
+    if (selectedId != null) {
+      setState(() {
+        selectedBankId = selectedId; // ✅ Lưu ID của ngân hàng đã chọn
+        selectedBankText = banks
+            .firstWhere((b) => b.idBank == selectedId)
+            .nameBank; // ✅ Cập nhật tên ngân hàng
+      });
+
+      print("🏦 Ngân hàng đã chọn: $selectedBankText (ID: $selectedBankId)");
+    }
   }
-
-  // Lấy danh sách ngân hàng sau khi API hoàn tất
-  final state = addAccountCubit.state;
-  if (state is! BankLoaded) {
-    print("⚠️ Vẫn không có dữ liệu sau khi gọi API!");
-    return;
-  }
-
-  final banks = state.banks;
-  print("✅ Danh sách ngân hàng trước khi mở BottomSheet: ${banks.length}");
-
-  final selected = await showModalBottomSheet<String>(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (ctx) {
-      return BlocProvider.value(
-        value: addAccountCubit,
-        child: BankSelectionSheet(
-          selectedBank: selectedBankText,
-          banks: banks,
-        ),
-      );
-    },
-  );
-
-  if (selected != null && selected.isNotEmpty) {
-    setState(() {
-      selectedBankText = selected;
-    });
-  }
-}
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final accountListRepo = context.read<AccountListRepo>(); // ✅ Đảm bảo Provider tồn tại
+        final accountListRepo =
+            context.read<AccountListRepo>(); // ✅ Đảm bảo Provider tồn tại
         return AddAccountCubit(accountListRepo: accountListRepo);
       },
       child: Scaffold(
@@ -191,7 +194,18 @@ void _showBankSelectionSheet(BuildContext context) async {
                   child: AppButton(
                     label: "Thêm Mới",
                     onPressed: () {
-                      // TODO: Xử lý thêm mới (gọi API thêm tài khoản)
+                      if (selectedBankId == null ||
+                          accountController.text.isEmpty ||
+                          nameAccountController.text.isEmpty) {
+                        Get.snackbar("Lỗi", "Vui lòng nhập đầy đủ thông tin!");
+                        return;
+                      }
+
+                      context.read<AddAccountCubit>().createBankAccount(
+                            bankId: selectedBankId!,
+                            bankAccount: accountController.text,
+                            bankOwner: nameAccountController.text,
+                          );
                     },
                   ),
                 ),

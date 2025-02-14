@@ -10,4 +10,9 @@ abstract class AccountService {
   @GET('/dropdown/bank')
   Future<HttpResponse< BaseResponse<List<BankModel>>>> fetchDanhSachBankApi();
 
+  @POST('/app/bankaccount/create')
+Future<HttpResponse<BaseResponse<bool>>> addAccountBank(
+  @Body() Map<String, dynamic> accountData, // ✅ Chỉ khai báo một lần
+);
+
 }

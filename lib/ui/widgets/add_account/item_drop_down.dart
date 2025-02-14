@@ -92,7 +92,7 @@ class _BankSelectionSheetState extends State<BankSelectionSheet> {
                       : null,
                   onTap: () {
                     // Khi chọn ngân hàng => pop với giá trị bank.name
-                    Navigator.pop(context, bank.nameBank);
+                    Navigator.pop(context, bank.idBank);
                   },
                 );
               },

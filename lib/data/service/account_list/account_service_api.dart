@@ -9,23 +9,44 @@ class AccountServiceApi extends BaseRemoteSource implements AccountListRepo {
   final AccountService service;
   AccountServiceApi({required this.service});
   @override
-Future<BaseResponse<List<BankModel>>> fetchBank() async {
-  try {
-    // Gọi API và nhận HttpResponse<BaseResponse<List<BankModel>>>
-    final HttpResponse<BaseResponse<List<BankModel>>> httpResponse =
-        await callApiWithErrorParser(service.fetchDanhSachBankApi());
+  Future<BaseResponse<List<BankModel>>> fetchBank() async {
+    try {
+      // Gọi API và nhận HttpResponse<BaseResponse<List<BankModel>>>
+      final HttpResponse<BaseResponse<List<BankModel>>> httpResponse =
+          await callApiWithErrorParser(service.fetchDanhSachBankApi());
 
-    // Lấy BaseResponse<List<BankModel>> từ HttpResponse
-    final BaseResponse<List<BankModel>> response = httpResponse.data;
+      // Lấy BaseResponse<List<BankModel>> từ HttpResponse
+      final BaseResponse<List<BankModel>> response = httpResponse.data;
 
-    if (httpResponse.response.statusCode == 200) {
-      return response; // ✅ Trả về đúng kiểu BaseResponse<List<BankModel>>
-    } else {
-      throw Exception("Lỗi HTTP: ${httpResponse.response.statusCode}");
+      if (httpResponse.response.statusCode == 200) {
+        return response; // ✅ Trả về đúng kiểu BaseResponse<List<BankModel>>
+      } else {
+        throw Exception("Lỗi HTTP: ${httpResponse.response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Lỗi khi gọi API fetchBank: $e");
     }
-  } catch (e) {
-    throw Exception("Lỗi khi gọi API fetchBank: $e");
+  }
+
+  @override
+  Future<BaseResponse<bool>> addAccountBank(
+      Map<String, dynamic> accountData) async {
+    try {
+      print("📡 Gửi API tạo tài khoản ngân hàng: $accountData");
+
+      final HttpResponse<BaseResponse<bool>> httpResponse =
+          await callApiWithErrorParser(service.addAccountBank(accountData));
+
+      final BaseResponse<bool> response = httpResponse.data;
+
+      if (httpResponse.response.statusCode == 200) {
+        print("✅ Tạo tài khoản ngân hàng thành công!");
+        return response;
+      } else {
+        throw Exception("Lỗi HTTP: ${httpResponse.response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("❌ Lỗi khi gọi API addAccountBank: $e");
+    }
   }
 }
-}
-  
