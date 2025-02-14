@@ -22,14 +22,15 @@ class _AccountService implements AccountService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<BaseResponse<BankModel>>> fetchDanhSachBankApi() async {
+  Future<HttpResponse<BaseResponse<List<BankModel>>>>
+      fetchDanhSachBankApi() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options =
-        _setStreamType<HttpResponse<BaseResponse<BankModel>>>(Options(
-      method: 'POST',
+        _setStreamType<HttpResponse<BaseResponse<List<BankModel>>>>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
@@ -45,11 +46,16 @@ class _AccountService implements AccountService {
               baseUrl,
             )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse<BankModel> _value;
+    late BaseResponse<List<BankModel>> _value;
     try {
-      _value = BaseResponse<BankModel>.fromJson(
+      _value = BaseResponse<List<BankModel>>.fromJson(
         _result.data!,
-        (json) => BankModel.fromJson(json as Map<String, dynamic>),
+        (json) => json is List<dynamic>
+            ? json
+                .map<BankModel>(
+                    (i) => BankModel.fromJson(i as Map<String, dynamic>))
+                .toList()
+            : List.empty(),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

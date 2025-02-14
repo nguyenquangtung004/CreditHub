@@ -21,14 +21,14 @@ BankModel _$BankModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$BankModel {
   @JsonKey(name: 'id')
-  int get id => throw _privateConstructorUsedError; // ✅ ID ngân hàng
+  int get idBank => throw _privateConstructorUsedError; // ✅ ID ngân hàng
   @JsonKey(name: 'avatar')
-  String get avatar =>
+  String get avatarBank =>
       throw _privateConstructorUsedError; // ✅ URL logo ngân hàng
   @JsonKey(name: 'name')
-  String get name => throw _privateConstructorUsedError; // ✅ Tên ngân hàng
+  String get nameBank => throw _privateConstructorUsedError; // ✅ Tên ngân hàng
   @JsonKey(name: 'description')
-  String get description => throw _privateConstructorUsedError;
+  String get descriptionBank => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,10 +42,10 @@ abstract class $BankModelCopyWith<$Res> {
       _$BankModelCopyWithImpl<$Res, BankModel>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') int id,
-      @JsonKey(name: 'avatar') String avatar,
-      @JsonKey(name: 'name') String name,
-      @JsonKey(name: 'description') String description});
+      {@JsonKey(name: 'id') int idBank,
+      @JsonKey(name: 'avatar') String avatarBank,
+      @JsonKey(name: 'name') String nameBank,
+      @JsonKey(name: 'description') String descriptionBank});
 }
 
 /// @nodoc
@@ -61,27 +61,27 @@ class _$BankModelCopyWithImpl<$Res, $Val extends BankModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? avatar = null,
-    Object? name = null,
-    Object? description = null,
+    Object? idBank = null,
+    Object? avatarBank = null,
+    Object? nameBank = null,
+    Object? descriptionBank = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      idBank: null == idBank
+          ? _value.idBank
+          : idBank // ignore: cast_nullable_to_non_nullable
               as int,
-      avatar: null == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
+      avatarBank: null == avatarBank
+          ? _value.avatarBank
+          : avatarBank // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      nameBank: null == nameBank
+          ? _value.nameBank
+          : nameBank // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      descriptionBank: null == descriptionBank
+          ? _value.descriptionBank
+          : descriptionBank // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -96,10 +96,10 @@ abstract class _$$BankModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') int id,
-      @JsonKey(name: 'avatar') String avatar,
-      @JsonKey(name: 'name') String name,
-      @JsonKey(name: 'description') String description});
+      {@JsonKey(name: 'id') int idBank,
+      @JsonKey(name: 'avatar') String avatarBank,
+      @JsonKey(name: 'name') String nameBank,
+      @JsonKey(name: 'description') String descriptionBank});
 }
 
 /// @nodoc
@@ -113,27 +113,27 @@ class __$$BankModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? avatar = null,
-    Object? name = null,
-    Object? description = null,
+    Object? idBank = null,
+    Object? avatarBank = null,
+    Object? nameBank = null,
+    Object? descriptionBank = null,
   }) {
     return _then(_$BankModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      idBank: null == idBank
+          ? _value.idBank
+          : idBank // ignore: cast_nullable_to_non_nullable
               as int,
-      avatar: null == avatar
-          ? _value.avatar
-          : avatar // ignore: cast_nullable_to_non_nullable
+      avatarBank: null == avatarBank
+          ? _value.avatarBank
+          : avatarBank // ignore: cast_nullable_to_non_nullable
               as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
+      nameBank: null == nameBank
+          ? _value.nameBank
+          : nameBank // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      descriptionBank: null == descriptionBank
+          ? _value.descriptionBank
+          : descriptionBank // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -143,33 +143,33 @@ class __$$BankModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BankModelImpl implements _BankModel {
   const _$BankModelImpl(
-      {@JsonKey(name: 'id') required this.id,
-      @JsonKey(name: 'avatar') required this.avatar,
-      @JsonKey(name: 'name') required this.name,
-      @JsonKey(name: 'description') required this.description});
+      {@JsonKey(name: 'id') required this.idBank,
+      @JsonKey(name: 'avatar') required this.avatarBank,
+      @JsonKey(name: 'name') required this.nameBank,
+      @JsonKey(name: 'description') required this.descriptionBank});
 
   factory _$BankModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$BankModelImplFromJson(json);
 
   @override
   @JsonKey(name: 'id')
-  final int id;
+  final int idBank;
 // ✅ ID ngân hàng
   @override
   @JsonKey(name: 'avatar')
-  final String avatar;
+  final String avatarBank;
 // ✅ URL logo ngân hàng
   @override
   @JsonKey(name: 'name')
-  final String name;
+  final String nameBank;
 // ✅ Tên ngân hàng
   @override
   @JsonKey(name: 'description')
-  final String description;
+  final String descriptionBank;
 
   @override
   String toString() {
-    return 'BankModel(id: $id, avatar: $avatar, name: $name, description: $description)';
+    return 'BankModel(idBank: $idBank, avatarBank: $avatarBank, nameBank: $nameBank, descriptionBank: $descriptionBank)';
   }
 
   @override
@@ -177,16 +177,19 @@ class _$BankModelImpl implements _BankModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BankModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.avatar, avatar) || other.avatar == avatar) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description));
+            (identical(other.idBank, idBank) || other.idBank == idBank) &&
+            (identical(other.avatarBank, avatarBank) ||
+                other.avatarBank == avatarBank) &&
+            (identical(other.nameBank, nameBank) ||
+                other.nameBank == nameBank) &&
+            (identical(other.descriptionBank, descriptionBank) ||
+                other.descriptionBank == descriptionBank));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, avatar, name, description);
+  int get hashCode =>
+      Object.hash(runtimeType, idBank, avatarBank, nameBank, descriptionBank);
 
   @JsonKey(ignore: true)
   @override
@@ -204,27 +207,27 @@ class _$BankModelImpl implements _BankModel {
 
 abstract class _BankModel implements BankModel {
   const factory _BankModel(
-          {@JsonKey(name: 'id') required final int id,
-          @JsonKey(name: 'avatar') required final String avatar,
-          @JsonKey(name: 'name') required final String name,
-          @JsonKey(name: 'description') required final String description}) =
-      _$BankModelImpl;
+      {@JsonKey(name: 'id') required final int idBank,
+      @JsonKey(name: 'avatar') required final String avatarBank,
+      @JsonKey(name: 'name') required final String nameBank,
+      @JsonKey(name: 'description')
+      required final String descriptionBank}) = _$BankModelImpl;
 
   factory _BankModel.fromJson(Map<String, dynamic> json) =
       _$BankModelImpl.fromJson;
 
   @override
   @JsonKey(name: 'id')
-  int get id;
+  int get idBank;
   @override // ✅ ID ngân hàng
   @JsonKey(name: 'avatar')
-  String get avatar;
+  String get avatarBank;
   @override // ✅ URL logo ngân hàng
   @JsonKey(name: 'name')
-  String get name;
+  String get nameBank;
   @override // ✅ Tên ngân hàng
   @JsonKey(name: 'description')
-  String get description;
+  String get descriptionBank;
   @override
   @JsonKey(ignore: true)
   _$$BankModelImplCopyWith<_$BankModelImpl> get copyWith =>

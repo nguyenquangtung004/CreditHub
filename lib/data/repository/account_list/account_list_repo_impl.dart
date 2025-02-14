@@ -9,7 +9,7 @@ class AccountListRepoImpl implements AccountListRepo {
   AccountListRepoImpl({required this.accountServiceApi});
 
   @override
-  Future<BaseResponse<BankModel>> fetchBank() async {
+  Future< BaseResponse<List<BankModel>>> fetchBank() async {
     try {
       return await accountServiceApi.fetchBank(); // ✅ Gọi API từ AccountServiceApi
     } catch (e) {

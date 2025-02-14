@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../data/model/bank/bank_model.dart';
 
 class BankSelectionSheet extends StatefulWidget {
-  final List<Map<String, String>> banks;
+  final List<BankModel> banks;
   final String selectedBank; // ngân hàng đang được chọn (nếu có)
 
   const BankSelectionSheet({
@@ -15,24 +16,23 @@ class BankSelectionSheet extends StatefulWidget {
 }
 
 class _BankSelectionSheetState extends State<BankSelectionSheet> {
-  late List<Map<String, String>> filteredBanks;
+  late List<BankModel> filteredBanks;
   final TextEditingController _searchCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredBanks = widget.banks; // ban đầu = toàn bộ
+    filteredBanks = widget.banks; // Khởi tạo danh sách ban đầu
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Chiều cao tuỳ ý, ví dụ 400
       height: 500,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Thanh "kéo" hoặc nút đóng (tuỳ thiết kế)
+          // Thanh kéo
           Container(
             width: 40,
             height: 4,
@@ -42,7 +42,8 @@ class _BankSelectionSheetState extends State<BankSelectionSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          // TextField tìm kiếm
+
+          // Ô tìm kiếm
           TextField(
             controller: _searchCtrl,
             decoration: InputDecoration(
@@ -55,10 +56,10 @@ class _BankSelectionSheetState extends State<BankSelectionSheet> {
             onChanged: (value) {
               setState(() {
                 filteredBanks = widget.banks.where((bank) {
-                  final name = bank["name"]?.toLowerCase() ?? "";
-                  final subName = bank["subName"]?.toLowerCase() ?? "";
+                  final name = bank.nameBank.toLowerCase();
+                  final description = bank.descriptionBank.toLowerCase();
                   return name.contains(value.toLowerCase()) ||
-                         subName.contains(value.toLowerCase());
+                         description.contains(value.toLowerCase());
                 }).toList();
               });
             },
@@ -71,35 +72,33 @@ class _BankSelectionSheetState extends State<BankSelectionSheet> {
               itemCount: filteredBanks.length,
               itemBuilder: (context, index) {
                 final bank = filteredBanks[index];
-                final bankName = bank["name"] ?? "";
-                final bankSub = bank["subName"] ?? "";
-                final bankLogo = bank["logo"] ?? "";
 
-                final isSelected = (bankName == widget.selectedBank);
+                final isSelected = bank.nameBank == widget.selectedBank;
 
                 return ListTile(
-                  leading: bankLogo.isNotEmpty
+                  leading: bank.avatarBank.isNotEmpty
                       ? Image.network(
-                          bankLogo,
+                          bank.avatarBank,
                           width: 40,
                           height: 40,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
                         )
                       : const Icon(Icons.account_balance),
-                  title: Text(bankName),
-                  subtitle: Text(bankSub),
+                  title: Text(bank.nameBank),
+                  subtitle: Text(bank.descriptionBank),
                   trailing: isSelected
                       ? const Icon(Icons.check_circle, color: Colors.blue)
                       : null,
                   onTap: () {
-                    // Khi chọn ngân hàng => pop với giá trị bankName
-                    Navigator.pop(context, bankName);
+                    // Khi chọn ngân hàng => pop với giá trị bank.name
+                    Navigator.pop(context, bank.nameBank);
                   },
                 );
               },
             ),
           ),
+
         ],
       ),
     );

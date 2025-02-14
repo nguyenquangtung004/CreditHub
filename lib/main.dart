@@ -1,4 +1,8 @@
+import 'package:credit_hub_app/data/repository/account_list/account_list_repo.dart';
 import 'package:credit_hub_app/data/repository/home/home_rep.dart'; // Nhập interface DataRepository cho Home
+import 'package:credit_hub_app/data/service/account_list/account_service.dart';
+import 'package:credit_hub_app/data/service/account_list/account_service_api.dart';
+import 'package:credit_hub_app/ui/screens/add_account/cubit/add_account_cubit.dart';
 import 'package:flutter/material.dart'; // Nhập thư viện Material Design của Flutter
 import 'package:flutter_bloc/flutter_bloc.dart'; // Nhập thư viện flutter_bloc để quản lý trạng thái
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // Nhập thư viện flutter_dotenv để đọc biến môi trường từ .env
@@ -7,6 +11,7 @@ import 'package:get/get.dart'; // Nhập thư viện GetX cho dependency injecti
 import 'core/constant/constant.dart'; // Nhập file constant.dart chứa các hằng số
 import 'core/utils/dependencies.dart'; // Nhập file dependencies.dart để cấu hình dependency injection
 import 'data/_base/network_manager.dart'; // Nhập NetworkManager để quản lý network requests
+import 'data/repository/account_list/account_list_repo_impl.dart';
 import 'data/repository/forgot_password/forgot_password_rep.dart'; // Nhập interface ForgotPasswordRepo
 import 'data/repository/forgot_password/forgot_password_rep_impl.dart'; // Nhập implementation ForgotPasswordRepoImpl
 import 'data/repository/home/home_rep_impl.dart'; // Nhập implementation DataRepositoryImpl cho Home
@@ -62,7 +67,13 @@ Future<void> main() async {
         RepositoryProvider<OtpService>(create: (context) => OtpService(dio)),
         RepositoryProvider<RequestService>(
             create: (context) => RequestService(dio)), // 🔥 Thêm RequestService
-
+         RepositoryProvider<AccountService>(
+          
+          create: (context) {
+             print("✅ AccountService created!");
+            return AccountService(dio);
+          },
+        ),
         /// ✅ **Cấu hình Repository**
         RepositoryProvider<DataRepository>(
           create: (context) =>
@@ -80,6 +91,22 @@ Future<void> main() async {
               requestService:
                   context.read<RequestService>()), // 🔥 Thêm RequestRepo
         ),
+        RepositoryProvider<AccountServiceApi>(
+          create: (context) {
+            print("✅ AccountServiceApi created!");
+            return AccountServiceApi(
+              service: context.read<AccountService>(),
+            );
+          },
+        ),
+        RepositoryProvider<AccountListRepo>(
+          create: (context) {
+              print("✅ AccountListRepo created!");
+            return AccountListRepoImpl(
+              accountServiceApi:
+                  context.read<AccountServiceApi>());
+          }, // 🔥 Thêm RequestRepo
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -94,10 +121,11 @@ Future<void> main() async {
                 ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
           ),
           BlocProvider<OtpCubit>(
-              create: (context) {
-    final String email = Get.arguments ?? ''; // Lấy email từ màn trước (nếu có)
-    return OtpCubit(context.read<OtpRepository>(), email: email);
-  },
+            create: (context) {
+              final String email =
+                  Get.arguments ?? ''; // Lấy email từ màn trước (nếu có)
+              return OtpCubit(context.read<OtpRepository>(), email: email);
+            },
           ),
           BlocProvider<RequestCubit>(
             create: (context) => RequestCubit(
@@ -110,6 +138,9 @@ Future<void> main() async {
             create: (context) => AddWithdrawalRequestCubit(
                 requestRepo: context.read<RequestRepo>()),
           ),
+          BlocProvider<AddAccountCubit>(
+              create: (context) => AddAccountCubit(
+                  accountListRepo: context.read<AccountListRepo>()))
         ],
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,

@@ -7,7 +7,7 @@ part 'account_service.g.dart';
 abstract class AccountService {
   factory AccountService (Dio dio, {String? baseUrl}) =_AccountService;
 
-  @POST('/dropdown/bank')
-  Future<HttpResponse<BaseResponse<BankModel>>>fetchDanhSachBankApi();
+  @GET('/dropdown/bank')
+  Future<HttpResponse< BaseResponse<List<BankModel>>>> fetchDanhSachBankApi();
 
 }
