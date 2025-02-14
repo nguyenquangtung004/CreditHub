@@ -2,7 +2,7 @@ import 'package:credit_hub_app/ui/screens/add_account/add_account.dart';
 import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
 import 'package:credit_hub_app/ui/screens/detail/detail_request.dart';
 import 'package:credit_hub_app/ui/screens/request/history.dart';
-import 'package:credit_hub_app/ui/screens/list_account_screen.dart';
+import 'package:credit_hub_app/ui/screens/list_account_screen/list_account_screen.dart';
 import 'package:credit_hub_app/ui/screens/otp/otp_screen.dart';
 import 'package:credit_hub_app/ui/widgets/bottom_navigator/custom_bottom_navigator.dart';
 import 'package:flutter/material.dart';
@@ -115,22 +115,6 @@ extension AppRouteExt on AppRoute {
           // ],
           transition: Transition.cupertino,
         );
-      // case AppRoute.customer:
-      //   return GetPageRoute(
-      //     settings: settings,
-      //     page: () => const CustomerScreen(),
-      //     bindings: [BindingsBuilder.put(() => CustomerCubit(Get.find()))],
-      //     transition: Transition.cupertino,
-      //   );
-      // case AppRoute.customerDetail:
-      //   return GetPageRoute(
-      //     settings: settings,
-      //     page: () => const CustomerDetailScreen(),
-      //     bindings: [
-      //       BindingsBuilder.put(() => CustomerDetailCubit(Get.find()))
-      //     ],
-      //     transition: Transition.cupertino,
-      //   );
       case AppRoute.main:
         return GetPageRoute(
           settings: settings,
@@ -168,12 +152,7 @@ extension AppRouteExt on AppRoute {
            
           ),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => NotificationCubit(Get.find())),
-            // BindingsBuilder.put(() => NewsCubit(Get.find()))
+           
           ],
           transition: Transition.cupertino,
         );
@@ -186,12 +165,7 @@ extension AppRouteExt on AppRoute {
          
           ),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => NotificationCubit(Get.find())),
-            // BindingsBuilder.put(() => NewsCubit(Get.find()))
+  
           ],
           transition: Transition.cupertino,
         );
