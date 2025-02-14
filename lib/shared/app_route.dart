@@ -1,4 +1,4 @@
-import 'package:credit_hub_app/ui/screens/add_account.dart';
+import 'package:credit_hub_app/ui/screens/add_account/add_account.dart';
 import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
 import 'package:credit_hub_app/ui/screens/detail/detail_request.dart';
 import 'package:credit_hub_app/ui/screens/request/history.dart';

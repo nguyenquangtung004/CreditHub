@@ -1,74 +1,105 @@
 import 'package:flutter/material.dart';
 
-class DropdownItem extends StatelessWidget {
-  final String textTitleBank;
-  final String textSubTitleBank;
-  final String imageBank;
-  final bool isSelected;
+class BankSelectionSheet extends StatefulWidget {
+  final List<Map<String, String>> banks;
+  final String selectedBank; // ngân hàng đang được chọn (nếu có)
 
-  const DropdownItem({
-    super.key,
-   required this.textTitleBank, required this.textSubTitleBank, required this.imageBank, required this.isSelected,
-  });
+  const BankSelectionSheet({
+    Key? key,
+    required this.banks,
+    required this.selectedBank,
+  }) : super(key: key);
+
+  @override
+  State<BankSelectionSheet> createState() => _BankSelectionSheetState();
+}
+
+class _BankSelectionSheetState extends State<BankSelectionSheet> {
+  late List<Map<String, String>> filteredBanks;
+  final TextEditingController _searchCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredBanks = widget.banks; // ban đầu = toàn bộ
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey, width: 0.5),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      // Chiều cao tuỳ ý, ví dụ 400
+      height: 500,
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          // Logo ngân hàng
+          // Thanh "kéo" hoặc nút đóng (tuỳ thiết kế)
           Container(
             width: 40,
-            height: 40,
+            height: 4,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            child: Image.asset(
-              imageBank,
-              fit: BoxFit.contain,
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(width: 16),
-          // Tên và mô tả ngân hàng
+          const SizedBox(height: 16),
+          // TextField tìm kiếm
+          TextField(
+            controller: _searchCtrl,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: "Tìm kiếm ngân hàng",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onChanged: (value) {
+              setState(() {
+                filteredBanks = widget.banks.where((bank) {
+                  final name = bank["name"]?.toLowerCase() ?? "";
+                  final subName = bank["subName"]?.toLowerCase() ?? "";
+                  return name.contains(value.toLowerCase()) ||
+                         subName.contains(value.toLowerCase());
+                }).toList();
+              });
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // Danh sách ngân hàng
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  textTitleBank,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  textSubTitleBank,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
+            child: ListView.builder(
+              itemCount: filteredBanks.length,
+              itemBuilder: (context, index) {
+                final bank = filteredBanks[index];
+                final bankName = bank["name"] ?? "";
+                final bankSub = bank["subName"] ?? "";
+                final bankLogo = bank["logo"] ?? "";
+
+                final isSelected = (bankName == widget.selectedBank);
+
+                return ListTile(
+                  leading: bankLogo.isNotEmpty
+                      ? Image.network(
+                          bankLogo,
+                          width: 40,
+                          height: 40,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error),
+                        )
+                      : const Icon(Icons.account_balance),
+                  title: Text(bankName),
+                  subtitle: Text(bankSub),
+                  trailing: isSelected
+                      ? const Icon(Icons.check_circle, color: Colors.blue)
+                      : null,
+                  onTap: () {
+                    // Khi chọn ngân hàng => pop với giá trị bankName
+                    Navigator.pop(context, bankName);
+                  },
+                );
+              },
             ),
           ),
-          const SizedBox(width: 16),
-          // Dấu kiểm nếu được chọn
-          if (isSelected)
-            const Icon(
-              Icons.check_circle,
-              color: Colors.blue,
-              size: 24,
-            ),
         ],
       ),
     );
