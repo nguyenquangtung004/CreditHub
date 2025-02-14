@@ -20,10 +20,14 @@ AccountBank _$AccountBankFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AccountBank {
+  @JsonKey(name: 'icons')
+  String? get imageAccountBank => throw _privateConstructorUsedError;
   @JsonKey(name: "bank_id")
   int get bankId => throw _privateConstructorUsedError;
   @JsonKey(name: "bank_account")
   String? get bankAccount => throw _privateConstructorUsedError;
+  @JsonKey(name: "bank_name")
+  String? get bankName => throw _privateConstructorUsedError;
   @JsonKey(name: "bank_owner")
   String? get bankOwner => throw _privateConstructorUsedError;
 
@@ -40,8 +44,10 @@ abstract class $AccountBankCopyWith<$Res> {
       _$AccountBankCopyWithImpl<$Res, AccountBank>;
   @useResult
   $Res call(
-      {@JsonKey(name: "bank_id") int bankId,
+      {@JsonKey(name: 'icons') String? imageAccountBank,
+      @JsonKey(name: "bank_id") int bankId,
       @JsonKey(name: "bank_account") String? bankAccount,
+      @JsonKey(name: "bank_name") String? bankName,
       @JsonKey(name: "bank_owner") String? bankOwner});
 }
 
@@ -58,11 +64,17 @@ class _$AccountBankCopyWithImpl<$Res, $Val extends AccountBank>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? imageAccountBank = freezed,
     Object? bankId = null,
     Object? bankAccount = freezed,
+    Object? bankName = freezed,
     Object? bankOwner = freezed,
   }) {
     return _then(_value.copyWith(
+      imageAccountBank: freezed == imageAccountBank
+          ? _value.imageAccountBank
+          : imageAccountBank // ignore: cast_nullable_to_non_nullable
+              as String?,
       bankId: null == bankId
           ? _value.bankId
           : bankId // ignore: cast_nullable_to_non_nullable
@@ -70,6 +82,10 @@ class _$AccountBankCopyWithImpl<$Res, $Val extends AccountBank>
       bankAccount: freezed == bankAccount
           ? _value.bankAccount
           : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankName: freezed == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
               as String?,
       bankOwner: freezed == bankOwner
           ? _value.bankOwner
@@ -88,8 +104,10 @@ abstract class _$$AccountBankImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "bank_id") int bankId,
+      {@JsonKey(name: 'icons') String? imageAccountBank,
+      @JsonKey(name: "bank_id") int bankId,
       @JsonKey(name: "bank_account") String? bankAccount,
+      @JsonKey(name: "bank_name") String? bankName,
       @JsonKey(name: "bank_owner") String? bankOwner});
 }
 
@@ -104,11 +122,17 @@ class __$$AccountBankImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? imageAccountBank = freezed,
     Object? bankId = null,
     Object? bankAccount = freezed,
+    Object? bankName = freezed,
     Object? bankOwner = freezed,
   }) {
     return _then(_$AccountBankImpl(
+      imageAccountBank: freezed == imageAccountBank
+          ? _value.imageAccountBank
+          : imageAccountBank // ignore: cast_nullable_to_non_nullable
+              as String?,
       bankId: null == bankId
           ? _value.bankId
           : bankId // ignore: cast_nullable_to_non_nullable
@@ -116,6 +140,10 @@ class __$$AccountBankImplCopyWithImpl<$Res>
       bankAccount: freezed == bankAccount
           ? _value.bankAccount
           : bankAccount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bankName: freezed == bankName
+          ? _value.bankName
+          : bankName // ignore: cast_nullable_to_non_nullable
               as String?,
       bankOwner: freezed == bankOwner
           ? _value.bankOwner
@@ -130,13 +158,18 @@ class __$$AccountBankImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$AccountBankImpl implements _AccountBank {
   const _$AccountBankImpl(
-      {@JsonKey(name: "bank_id") this.bankId = 0,
+      {@JsonKey(name: 'icons') this.imageAccountBank = '',
+      @JsonKey(name: "bank_id") this.bankId = 0,
       @JsonKey(name: "bank_account") this.bankAccount = '',
+      @JsonKey(name: "bank_name") this.bankName = '',
       @JsonKey(name: "bank_owner") this.bankOwner = ''});
 
   factory _$AccountBankImpl.fromJson(Map<String, dynamic> json) =>
       _$$AccountBankImplFromJson(json);
 
+  @override
+  @JsonKey(name: 'icons')
+  final String? imageAccountBank;
   @override
   @JsonKey(name: "bank_id")
   final int bankId;
@@ -144,12 +177,15 @@ class _$AccountBankImpl implements _AccountBank {
   @JsonKey(name: "bank_account")
   final String? bankAccount;
   @override
+  @JsonKey(name: "bank_name")
+  final String? bankName;
+  @override
   @JsonKey(name: "bank_owner")
   final String? bankOwner;
 
   @override
   String toString() {
-    return 'AccountBank(bankId: $bankId, bankAccount: $bankAccount, bankOwner: $bankOwner)';
+    return 'AccountBank(imageAccountBank: $imageAccountBank, bankId: $bankId, bankAccount: $bankAccount, bankName: $bankName, bankOwner: $bankOwner)';
   }
 
   @override
@@ -157,16 +193,21 @@ class _$AccountBankImpl implements _AccountBank {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AccountBankImpl &&
+            (identical(other.imageAccountBank, imageAccountBank) ||
+                other.imageAccountBank == imageAccountBank) &&
             (identical(other.bankId, bankId) || other.bankId == bankId) &&
             (identical(other.bankAccount, bankAccount) ||
                 other.bankAccount == bankAccount) &&
+            (identical(other.bankName, bankName) ||
+                other.bankName == bankName) &&
             (identical(other.bankOwner, bankOwner) ||
                 other.bankOwner == bankOwner));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, bankId, bankAccount, bankOwner);
+  int get hashCode => Object.hash(
+      runtimeType, imageAccountBank, bankId, bankAccount, bankName, bankOwner);
 
   @JsonKey(ignore: true)
   @override
@@ -184,8 +225,10 @@ class _$AccountBankImpl implements _AccountBank {
 
 abstract class _AccountBank implements AccountBank {
   const factory _AccountBank(
-          {@JsonKey(name: "bank_id") final int bankId,
+          {@JsonKey(name: 'icons') final String? imageAccountBank,
+          @JsonKey(name: "bank_id") final int bankId,
           @JsonKey(name: "bank_account") final String? bankAccount,
+          @JsonKey(name: "bank_name") final String? bankName,
           @JsonKey(name: "bank_owner") final String? bankOwner}) =
       _$AccountBankImpl;
 
@@ -193,11 +236,17 @@ abstract class _AccountBank implements AccountBank {
       _$AccountBankImpl.fromJson;
 
   @override
+  @JsonKey(name: 'icons')
+  String? get imageAccountBank;
+  @override
   @JsonKey(name: "bank_id")
   int get bankId;
   @override
   @JsonKey(name: "bank_account")
   String? get bankAccount;
+  @override
+  @JsonKey(name: "bank_name")
+  String? get bankName;
   @override
   @JsonKey(name: "bank_owner")
   String? get bankOwner;

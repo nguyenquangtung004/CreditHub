@@ -104,6 +104,48 @@ class _AccountService implements AccountService {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<BaseResponse<PaginationResponse<AccountBank>>>>
+      fetchDanhSachAccountApi(PaginationParams params) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = params;
+    final _options = _setStreamType<
+        HttpResponse<BaseResponse<PaginationResponse<AccountBank>>>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'app/bankaccount/list',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late BaseResponse<PaginationResponse<AccountBank>> _value;
+    try {
+      _value = BaseResponse<PaginationResponse<AccountBank>>.fromJson(
+        _result.data!,
+        (json) => PaginationResponse<AccountBank>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => AccountBank.fromJson(json as Map<String, dynamic>),
+        ),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

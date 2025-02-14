@@ -35,3 +35,12 @@ class AddAccountError extends AddAccountState {
   final String message;
   AddAccountError({required this.message});
 }
+
+class LoadingDataBankAccount extends AddAccountState {
+}
+
+class LoadedDataBankAccount extends AddAccountState {
+  final List<AccountBank> accountBank;
+  LoadedDataBankAccount({required this.accountBank});
+  
+}
