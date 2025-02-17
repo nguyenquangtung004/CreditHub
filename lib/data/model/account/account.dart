@@ -5,7 +5,6 @@ part 'account.g.dart';
 
 @freezed
 class AccountBank with _$AccountBank {
-  @JsonSerializable(explicitToJson: true) // ✅ Bắt buộc để JSON hóa dữ liệu
   const factory AccountBank({
     @JsonKey(name: 'icons') @Default('') String? imageAccountBank,
     @JsonKey(name: "bank_id") @Default(0) int bankId,

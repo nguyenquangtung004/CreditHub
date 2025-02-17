@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
-import '../add_account/cubit/add_account_cubit.dart'; // Import Cubit
+import 'cubit/list_account_cubit_cubit.dart';
+import 'cubit/list_account_cubit_state.dart';
 
 class ListAccountScreen extends StatefulWidget {
   const ListAccountScreen({super.key});
@@ -16,12 +17,34 @@ class ListAccountScreen extends StatefulWidget {
 
 class _ListAccountScreenState extends State<ListAccountScreen> {
   int? selectedIndex; // Lưu trữ mục được chọn
+  late ScrollController _scrollController;
+  int _currentPage = 1;
+  final int _pageSize = 10;
 
   @override
   void initState() {
     super.initState();
-    // Gọi Cubit để lấy danh sách tài khoản khi màn hình được tạo
-    context.read<AddAccountCubit>().fetchAccountBank(1, 10);
+    _scrollController = ScrollController();
+    
+    // Gọi API lần đầu khi màn hình được tạo
+    context.read<ListAccountCubit>().fetchAccountBank(_currentPage, _pageSize);
+
+    // Lắng nghe sự kiện cuộn để tải thêm dữ liệu khi vuốt lên
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100) {
+      // Gọi API khi vuốt lên gần cuối danh sách
+      final cubit = context.read<ListAccountCubit>();
+      if (cubit.state is ListAccountSuc) {
+        final state = cubit.state as ListAccountSuc;
+        if (_currentPage < state.data.totalPage) {
+          _currentPage++;
+          cubit.fetchAccountBank(_currentPage, _pageSize);
+        }
+      }
+    }
   }
 
   @override
@@ -40,12 +63,12 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ),
-      body: BlocBuilder<AddAccountCubit, AddAccountState>(
+      body: BlocBuilder<ListAccountCubit, AccountListBankState>(
         builder: (context, state) {
-          if (state is AddAccountLoading) {
+          if (state is ListAccountLoading && _currentPage == 1) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is LoadedDataBankAccount) {
-            final accountList = state.accountBank;
+          } else if (state is ListAccountSuc) {
+            final accountList = state.data.data;
 
             if (accountList.isEmpty) {
               return const Center(child: Text("Không có tài khoản ngân hàng nào."));
@@ -54,17 +77,26 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
             return Stack(
               children: [
                 ListView.separated(
-                  itemCount: accountList.length,
+                  controller: _scrollController,
+                  itemCount: accountList.length + 1, // Thêm 1 để hiển thị loading khi phân trang
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 5), // Khoảng cách 5px giữa các mục
                   itemBuilder: (context, index) {
+                    if (index == accountList.length) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(), // Hiển thị khi tải thêm dữ liệu
+                        ),
+                      );
+                    }
+
                     final account = accountList[index];
                     return Slidable(
                       key: ValueKey(account.bankId),
                       endActionPane: ActionPane(
-                        motion: const ScrollMotion(), // ⚡ THAY DrawerMotion() bằng ScrollMotion()
+                        motion: const ScrollMotion(),
                         children: [
-                          // Nút chỉnh sửa
                           SlidableAction(
                             borderRadius: BorderRadius.circular(10),
                             onPressed: (context) {
@@ -77,7 +109,6 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
                             icon: Icons.edit,
                             label: 'Sửa',
                           ),
-                          // Nút xóa
                           SlidableAction(
                             borderRadius: BorderRadius.circular(10),
                             onPressed: (context) {
@@ -93,9 +124,9 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
                         ],
                       ),
                       child: ItemAccount(
-                        imageBank: Image.network(account.imageAccountBank?? "Không xác đinh đc ảnh", fit: BoxFit.cover),
+                        imageBank: Image.network(account.imageAccountBank ?? "Không xác định được ảnh", fit: BoxFit.cover),
                         textName: account.bankOwner ?? 'Không xác định được tên khách',
-                        textBank: account.bankName ??'Không xác định được ngân hàng',
+                        textBank: account.bankName ?? 'Không xác định được ngân hàng',
                         textNumberBank: account.bankAccount ?? 'Không xác định được số tài khoản',
                         isSelected: selectedIndex == index,
                         onSelect: () {
@@ -120,8 +151,8 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
                 )
               ],
             );
-          } else if (state is AddAccountError) {
-            return Center(child: Text(state.message));
+          } else if (state is ListAccountError) {
+            return Center(child: Text(state.error));
           }
 
           return const Center(child: Text("Không có dữ liệu."));
@@ -129,4 +160,11 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 }
+

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'account_service.dart';
+part of 'account_bank_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'account_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _AccountService implements AccountService {
-  _AccountService(
+class _AccountBankService implements AccountBankService {
+  _AccountBankService(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
@@ -22,65 +22,21 @@ class _AccountService implements AccountService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<BaseResponse<List<BankModel>>>>
-      fetchDanhSachBankApi() async {
+  Future<HttpResponse<BaseResponse<PaginationResponse<AccountBank>>>>
+      fetchAccountBankList(PaginationParams params) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<HttpResponse<BaseResponse<List<BankModel>>>>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/dropdown/bank',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse<List<BankModel>> _value;
-    try {
-      _value = BaseResponse<List<BankModel>>.fromJson(
-        _result.data!,
-        (json) => json is List<dynamic>
-            ? json
-                .map<BankModel>(
-                    (i) => BankModel.fromJson(i as Map<String, dynamic>))
-                .toList()
-            : List.empty(),
-      );
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<BaseResponse<bool>>> addAccountBank(
-      Map<String, dynamic> accountData) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(accountData);
-    final _options = _setStreamType<HttpResponse<BaseResponse<bool>>>(Options(
+    final _data = params;
+    final _options = _setStreamType<
+        HttpResponse<BaseResponse<PaginationResponse<AccountBank>>>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/app/bankaccount/create',
+          'app/bankaccount/list',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -90,11 +46,14 @@ class _AccountService implements AccountService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BaseResponse<bool> _value;
+    late BaseResponse<PaginationResponse<AccountBank>> _value;
     try {
-      _value = BaseResponse<bool>.fromJson(
+      _value = BaseResponse<PaginationResponse<AccountBank>>.fromJson(
         _result.data!,
-        (json) => json as bool,
+        (json) => PaginationResponse<AccountBank>.fromJson(
+          json as Map<String, dynamic>,
+          (json) => AccountBank.fromJson(json as Map<String, dynamic>),
+        ),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);

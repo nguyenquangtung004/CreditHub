@@ -154,8 +154,7 @@ class __$$AccountBankImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class _$AccountBankImpl implements _AccountBank {
   const _$AccountBankImpl(
       {@JsonKey(name: 'icons') this.imageAccountBank = '',

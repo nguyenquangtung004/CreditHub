@@ -1,13 +1,10 @@
 import 'package:credit_hub_app/data/_base/base_remote_source.dart';
 import 'package:credit_hub_app/data/_base/base_reponse.dart';
 import 'package:credit_hub_app/data/model/bank/bank_model.dart';
-import 'package:credit_hub_app/data/model/pagination_params.dart';
 import 'package:credit_hub_app/data/repository/account_list/account_list_repo.dart';
 import 'package:credit_hub_app/data/service/account_list/account_service.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../model/account/account.dart';
-import '../../model/pagination/pagination_response.dart';
 
 class AccountServiceApi extends BaseRemoteSource implements AccountListRepo {
   final AccountService service;
@@ -54,12 +51,7 @@ class AccountServiceApi extends BaseRemoteSource implements AccountListRepo {
     }
   }
 
-  @override
-  Future<BaseResponse<PaginationResponse<AccountBank>>> fetchAccountBank({required PaginationParams params}) {
-  return callApiWithErrorParser(service.fetchDanhSachAccountApi(params)).then(
-      (httpResponse) => httpResponse.data,
-    );
-  }
+ 
 }
 
   
