@@ -25,6 +25,7 @@ class _CustomBottomNavigatorState extends State<CustomBottomNavigator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
        body: _pages[_currentIndex],
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
@@ -42,9 +43,7 @@ class _CustomBottomNavigatorState extends State<CustomBottomNavigator> {
           topLeft: Radius.circular(20.0), // Bo góc trái
           topRight: Radius.circular(20.0), // Bo góc phải
         ),
-        // color: Colors.white,
-        // shape: const CircularNotchedRectangle(),
-        // notchMargin: 5.0,
+        
         child: BottomNavigationBar(
           backgroundColor: Colors.white,
           currentIndex: _currentIndex,

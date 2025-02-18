@@ -1,3 +1,4 @@
+import 'package:credit_hub_app/core/constant/constant.dart';
 import 'package:credit_hub_app/shared/app_route.dart';
 import 'package:credit_hub_app/ui/widgets/list_account_screen/item_account.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +134,7 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
                               icon: Icons.edit,
                               label: 'Sửa',
                             ),
+                            w(5),
                             SlidableAction(
                               borderRadius: BorderRadius.circular(10),
                               onPressed: (context) {
