@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import '../../../core/components/dialog/app_dialog.dart';
 import '../../../core/components/loading/app_loading.dart';
 import '../../../core/constant/app_string.dart';
-// import '../../../data/model/auth/user/user.dart';
 import '../../../data/service/sign_in_api.dart';
 import '../../../data/service/sign_in_service.dart';
 import '../../../shared/app_manager.dart';

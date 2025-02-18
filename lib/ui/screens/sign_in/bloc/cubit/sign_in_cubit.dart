@@ -24,9 +24,8 @@ class SignInCubit extends Cubit<SignInState> {
     required String password,
   }) async {
     try {
-      // STEP 1: Cập nhật trạng thái thành "loading".
       emit(state.copyWith(status: SignInStatus.loading));
-      logger.d("🔄 Đang thực hiện đăng nhập...");
+      logger.d("Step 1: Đang thực hiện đăng nhập...");
 
       // STEP 2: Tạo đối tượng SignInParam với thông tin đăng nhập.
       AuthModel signInParam = AuthModel(
@@ -65,19 +64,5 @@ class SignInCubit extends Cubit<SignInState> {
     }
   }
 
-  // ANCHOR: Phương thức đăng nhập bằng sinh trắc học (chưa triển khai).
-  Future<void> signInBiometric() async {
-    try {
-      logger.d("🔄 Đăng nhập bằng sinh trắc học...");
-
-      // TODO: Triển khai chức năng đăng nhập bằng sinh trắc học.
-      // Hiện tại, đang để trống để tránh lỗi.
-      
-    } catch (e) {
-      logger.e("🚨 Lỗi đăng nhập bằng sinh trắc học: $e");
-
-      // Cập nhật trạng thái lỗi
-      emit(state.copyWith(status: SignInStatus.failure, message: e.toString()));
-    }
-  }
+  
 }

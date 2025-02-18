@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:credit_hub_app/core/button/app_button.dart';
 import 'package:credit_hub_app/core/components/text_field/app_text_field.dart';
 import 'package:credit_hub_app/core/constant/app_string.dart';
 import 'package:credit_hub_app/core/constant/constant.dart';
@@ -26,16 +25,14 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
   // Giá trị ngân hàng đang chọn
   String selectedBankText = "Techcombank";
 
-  /// Mở Bottom Sheet chọn ngân hàng sử dụng Cubit để lấy dữ liệu từ API
   int? selectedBankId; // ✅ Lưu ID của ngân hàng đã chọn
 
   void _showBankSelectionSheet(BuildContext context) async {
-    print("🟡 Mở BankSelectionSheet...");
-
+    print("Step 1: Mở BankSelectionSheet...");
     final addAccountCubit = context.read<AddAccountCubit>();
 
     if (addAccountCubit.state is! BankLoaded) {
-      print("❌ Không có dữ liệu ngân hàng, gọi API...");
+      print("Step 2: Không có dữ liệu ngân hàng, gọi API...");
       await addAccountCubit.fetchBank();
     }
 
@@ -104,17 +101,17 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
               children: [
                 // Số tài khoản
                 RichText(
-                  text: TextSpan(
-                    text: titleNumberAccount, // "Số tài khoản"
-                    style: const TextStyle(
+                  text: const TextSpan(
+                    text: titleNumberAccount,
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     children: [
                       TextSpan(
-                        text: richTextTitle01, // " *"
-                        style: const TextStyle(
+                        text: richTextTitle01,
+                        style: TextStyle(
                           color: Colors.red,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -125,24 +122,24 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                 ),
                 h(9),
                 CustomTextField(
-                  label: labelAddAccount, // "Nhập số tài khoản"
+                  label: labelAddAccount,
                   controller: accountController,
                 ),
                 h(22),
 
                 // Tên tài khoản
                 RichText(
-                  text: TextSpan(
-                    text: titleNameAccount, // "Tên tài khoản"
-                    style: const TextStyle(
+                  text: const TextSpan(
+                    text: titleNameAccount,
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     children: [
                       TextSpan(
-                        text: richTextTitle01, // " *"
-                        style: const TextStyle(
+                        text: richTextTitle01,
+                        style: TextStyle(
                           color: Colors.red,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -160,17 +157,17 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
 
                 // Ngân hàng
                 RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     text: titlebank, // "Ngân hàng"
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                     children: [
                       TextSpan(
-                        text: richTextTitle01, // " *"
-                        style: const TextStyle(
+                        text: richTextTitle01,
+                        style: TextStyle(
                           color: Colors.red,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -180,19 +177,20 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   ),
                 ),
                 h(9),
-
-                // CustomDropdownButton "giả" -> bấm 1 lần là mở bottom sheet
                 CustomDropdownButton(
                   currentValue: selectedBankText,
                   onTap: () => _showBankSelectionSheet(context),
                 ),
-                h(22),
-
-                // Nút "Thêm Mới"
+                
+                
+                h(144),
+                /* ------------------------------ Nút thêm mới ------------------------------ */
                 SizedBox(
                   width: double.infinity,
-                  child: AppButton(
-                    label: "Thêm Mới",
+                  height: 65,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFFF4A4A)),
                     onPressed: () {
                       if (selectedBankId == null ||
                           accountController.text.isEmpty ||
@@ -207,6 +205,10 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                             bankOwner: nameAccountController.text,
                           );
                     },
+                    child: const Text(
+                      textAdd,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],

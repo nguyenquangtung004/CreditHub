@@ -1,6 +1,9 @@
+import 'package:credit_hub_app/core/constant/constant.dart';
+import 'package:credit_hub_app/shared/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:credit_hub_app/ui/screens/request/cubit/request_cubit.dart';
+import 'package:get/get.dart';
 
 import '../../widgets/detail_request/custom_card_detail.dart';
 import '../../widgets/detail_request/custom_time_line.dart';
@@ -55,7 +58,7 @@ class DetailRequestScreen extends StatelessWidget {
                         dateRequest: requestDetail.dateRequestHistory,
                         lotPrice: requestDetail.moneyRequestHistory.toString(),
                       ),
-                      const SizedBox(height: 10),
+                      h(10),
                       const Text(
                         "Chi tiết yêu cầu",
                         style: TextStyle(
@@ -63,7 +66,7 @@ class DetailRequestScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      h(10),
                       Container(
                         width: double.infinity,
                         height: 312,
@@ -79,9 +82,9 @@ class DetailRequestScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      h(20),
                       CustomTimeline(textstatus: requestDetail.statusNameHistory),
-                      const SizedBox(height: 13),
+                      h(13),
                       if (requestDetail.statusNameHistory == "Không quyết toán")
                         Center(
                           child: Container(
@@ -90,7 +93,7 @@ class DetailRequestScreen extends StatelessWidget {
                             child: ElevatedButton(
                               onPressed: () {
                                 // Chuyển hướng đến trang yêu cầu lại
-                                Navigator.pushNamed(context, "/addWithdrawalRequest");
+                                Get.offAllNamed(AppRoute.addWithdrawalRequest.name);
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: const Color(0xFFFF4A4A),

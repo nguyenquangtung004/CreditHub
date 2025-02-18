@@ -37,3 +37,4 @@ const String titlebank = 'Ngân hàng';
 const String textTitleOtp = 'Nhập OTP';
 const String textTitleOtpDescription = 'OTP đã được gửi về email: ';
 const String textTitleOtpDescription02 = ' Hãy kiểm tra và nhập xuống phía dưới';
+const String textAdd = 'Thêm mới';

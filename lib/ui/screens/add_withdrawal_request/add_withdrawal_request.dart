@@ -43,7 +43,6 @@ class _AddWithDrawalRequestScreenState
 }
 
   /// ✅ Gọi API upload ảnh, nhận về URL và trích xuất tên file
-  /// ✅ Gọi API upload ảnh, nhận về URL và trích xuất tên file
   Future<void> _uploadImageToServer() async {
   if (_selectedImage == null) return;
 
@@ -71,7 +70,6 @@ class _AddWithDrawalRequestScreenState
   }
 }
 
-  /// ✅ Gửi yêu cầu rút tiền lên server
   /// ✅ Gửi yêu cầu rút tiền lên server
   void _submitRequest() {
     final lotNo = _lotNoController.text.trim();
@@ -136,9 +134,9 @@ class _AddWithDrawalRequestScreenState
             setState(() {
               _isUploading = false; // ✅ Dừng loading khi lỗi xảy ra
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("❌ Lỗi: ${state.error}")),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(content: Text("❌ Lỗi: ${state.error}")),
+            // );
           }
         },
         child: SingleChildScrollView(

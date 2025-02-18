@@ -11,19 +11,19 @@ class AddAccountCubit extends Cubit<AddAccountState> {
 
   AddAccountCubit({required this.accountListRepo}) : super(AddAccountInitial());
 
-  /// ✅ Lấy danh sách ngân hàng
+  /// ✅ Lấy danh sách ngân hàng từ api -> Trong Bottom Sheet
   Future<void> fetchBank() async {
     emit(AddAccountLoading());
     try {
-      print("📡 Gửi yêu cầu lấy danh sách ngân hàng...");
+      print("Step 1: Gửi yêu cầu lấy danh sách ngân hàng...");
       final BaseResponse<List<BankModel>> response = await accountListRepo.fetchBank();
-      print("📥 API phản hồi: ${response.toJson}");
+      print("Step 2: API phản hồi: ${response.toJson}");
 
       if (response.data != null && response.data!.isNotEmpty) {
-        print("✅ API trả về danh sách ngân hàng: ${response.data!.length}");
+        print("Step True 3: ✅ API trả về danh sách ngân hàng: ${response.data!.length}");
         emit(BankLoaded(banks: response.data!)); // ✅ Trả về danh sách ngân hàng
       } else {
-        print("⚠️ Không có dữ liệu ngân hàng.");
+        print("Step False 3:⚠️ Không có dữ liệu ngân hàng.");
         emit(BankError(message: 'Không có dữ liệu ngân hàng.'));
       }
     } catch (e) {
