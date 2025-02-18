@@ -2,7 +2,7 @@ import 'package:credit_hub_app/core/constant/constant.dart';
 import 'package:flutter/material.dart';
 
 class ItemAccount extends StatelessWidget {
-  final Image imageBank;
+  final String imageBank;
   final String textName;
   final String textBank;
   final String textNumberBank;
@@ -41,11 +41,7 @@ class ItemAccount extends StatelessWidget {
                 padding: EdgeInsets.only(left: 12.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: imageBank,
-                  ),
+                 child: Image.network(imageBank,width: 50,height: 50,),
                 ),
               ),
               w(12),
@@ -56,23 +52,26 @@ class ItemAccount extends StatelessWidget {
                     Text(
                       textName,
                       style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
+                  
+                     Text(
                       textBank,
                       style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    h(7),
                     Text(
                       textNumberBank,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
                         color: Colors.grey,
                       ),
                     ),
@@ -81,9 +80,9 @@ class ItemAccount extends StatelessWidget {
               ),
               w(12),
               if (isSelected)
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(right: 10),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check_circle,
                     color: Colors.green,
                   ),

@@ -148,7 +148,7 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
                           ],
                         ),
                         child: ItemAccount(
-                          imageBank: Image.network(account.imageAccountBank ?? "Không xác định được ảnh", fit: BoxFit.cover),
+                          imageBank: account.imageAccountBank?? '',
                           textName: account.bankOwner ?? 'Không xác định được tên khách',
                           textBank: account.bankName ?? 'Không xác định được ngân hàng',
                           textNumberBank: account.bankAccount ?? 'Không xác định được số tài khoản',

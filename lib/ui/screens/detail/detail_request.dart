@@ -85,15 +85,14 @@ class DetailRequestScreen extends StatelessWidget {
                       h(20),
                       CustomTimeline(textstatus: requestDetail.statusNameHistory),
                       h(13),
-                      if (requestDetail.statusNameHistory == "Không quyết toán")
+                      // if (requestDetail.statusNameHistory == "Không quyết toán")
                         Center(
                           child: Container(
                             width: 270,
                             height: 65,
                             child: ElevatedButton(
                               onPressed: () {
-                                // Chuyển hướng đến trang yêu cầu lại
-                                Get.offAllNamed(AppRoute.addWithdrawalRequest.name);
+                                Get.toNamed(AppRoute.addWithdrawalRequest.name);
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: const Color(0xFFFF4A4A),

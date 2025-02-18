@@ -9,16 +9,16 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           titleNotification,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
         ),
       ),
-      body: Padding(
+      body: const Padding(
         padding: EdgeInsets.only(left: 20,right: 20),
         child: Column(
-          children: const [
+          children: [
             Card(
               color: Colors.white,
               child: ListTile(
