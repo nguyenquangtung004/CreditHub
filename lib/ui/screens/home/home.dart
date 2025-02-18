@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bloc: homeCubit,
                 builder: (context, state) {
                   if (state is HomeLoading) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(
                         color: Colors.red,
                       ),
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 220,
                                 color: Colors.white,
                                 width: double.infinity,
-                                child: CustomChartLine(),
+                                child: const CustomChartLine(),
                               ),
                             ],
                           ),
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is HomeError) {
                     return Center(child: Text("Lỗi: ${state.message}"));
                   } else {
-                    return Center(child: Text("Nhấn để tải dữ liệu!"));
+                    return const Center(child: Text("Nhấn để tải dữ liệu!"));
                   }
                 },
               ),
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             height: 230,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFFFF4A4A), Color(0xFFFF754A)],
                 begin: Alignment.topLeft,
@@ -227,7 +227,7 @@ class CustomListViewRequest extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 17,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           recentRequests,
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),

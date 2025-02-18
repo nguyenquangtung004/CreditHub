@@ -2,7 +2,6 @@ export 'package:credit_hub_app/data/model/add_without/add_without.dart';
 export 'package:credit_hub_app/data/repository/request/request_repo.dart';
 export '../../../core/constant/app_string.dart';
 export '../../../core/constant/constant.dart';
-export '../../../data/model/add_without/add_without.dart';
 export '../../widgets/add_width_drawal_request/custom_dotted_border_box.dart';
 export 'cubit/add_withdrawal_request_cubit.dart';
 export 'package:credit_hub_app/ui/widgets/add_width_drawal_request/custom_rich_text.dart';

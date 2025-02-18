@@ -1,10 +1,5 @@
 // ANCHOR: Import các thư viện cần thiết
-import 'package:credit_hub_app/core/utils/logger.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/config/app_config.dart';
-import '../../../../../data/model/auth/sign_in/sign_in.dart';
-import '../../../../../data/repository/sign_in/sign_in_rep.dart';
-import '../../../../../shared/app_manager.dart';
+import 'package:credit_hub_app/ui/screens/sign_in/sign_in_barrel.dart';
 import 'sign_in_state.dart'; // Định nghĩa trạng thái đăng nhập.
 
 // ANCHOR: Tạo logger cho SignInCubit

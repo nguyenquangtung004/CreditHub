@@ -1,6 +1,9 @@
 import 'package:credit_hub_app/ui/screens/add_account/add_account.dart';
 import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
+import 'package:credit_hub_app/ui/screens/add_withdrawal_request/cubit/add_withdrawal_request_cubit.dart';
 import 'package:credit_hub_app/ui/screens/detail/detail_request.dart';
+import 'package:credit_hub_app/ui/screens/home/cubit/home_cubit.dart';
+import 'package:credit_hub_app/ui/screens/request/cubit/request_cubit.dart';
 import 'package:credit_hub_app/ui/screens/request/history.dart';
 import 'package:credit_hub_app/ui/screens/list_account_screen/list_account_screen.dart';
 import 'package:credit_hub_app/ui/screens/otp/otp_screen.dart';
@@ -8,6 +11,7 @@ import 'package:credit_hub_app/ui/widgets/bottom_navigator/custom_bottom_navigat
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../ui/screens/forgot_password/cubit/forgot_password_cubit.dart';
 import '../ui/screens/forgot_password/forgot_password.dart';
 import '../ui/screens/sign_in/bloc/cubit/sign_in_cubit.dart';
 import '../ui/screens/sign_in/sign_in.dart'; //NOTE :Thư viện GetX
@@ -83,29 +87,22 @@ extension AppRouteExt on AppRoute {
         return GetPageRoute(
           settings: settings,
           page: () => const ForgotPasswordScreen(),
-          // bindings: [
-          //   BindingsBuilder.put(() => ForgotPasswordCubit(Get.find()))
-          // ],
+          bindings: [
+            BindingsBuilder.put(() => ForgotPasswordCubit(Get.find()))
+          ],
           transition: Transition.cupertino,
         );
-      case AppRoute.addWithdrawalRequest:
+         case AppRoute.enterOtp:
         return GetPageRoute(
           settings: settings,
-          page: () => const AddWithDrawalRequestScreen(),
+          page: () => const OtpScreen(),
           bindings: [
             BindingsBuilder.put(() => SignInCubit(Get.find(), Get.find()))
           ],
           transition: Transition.cupertino,
         );
-      case AppRoute.enterOtp:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const OtpScreen(),
-          // bindings: [
-          //   BindingsBuilder.put(() => SignInCubit(Get.find(), Get.find()))
-          // ],
-          transition: Transition.cupertino,
-        );
+   
+     
        case AppRoute.accountList:
         return GetPageRoute(
           settings: settings,
@@ -120,10 +117,9 @@ extension AppRouteExt on AppRoute {
           settings: settings,
           page: () => const CustomBottomNavigator(),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
+            BindingsBuilder.put(() => HomeCubit(dataRepository: Get.find())),
+            BindingsBuilder.put(() => RequestCubit(Get.find())),
+            BindingsBuilder.put(() => AddWithdrawalRequestCubit(requestRepo: Get.find())),
             // BindingsBuilder.put(() => NotificationCubit(Get.find())),
             // BindingsBuilder.put(() => NewsCubit(Get.find()))
           ],

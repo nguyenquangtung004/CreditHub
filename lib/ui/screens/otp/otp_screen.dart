@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -16,7 +18,7 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final String email =
         Get.arguments ?? "Email không xác định"; // ✅ Lấy email từ Get.arguments
-    print('Lấy từ email argument:$email');
+    log('Lấy từ email argument:$email');
     return BlocProvider(
       create: (context) =>
           OtpCubit(context.read<OtpRepository>(), email: email),
@@ -24,9 +26,7 @@ class OtpScreen extends StatelessWidget {
         body: BlocConsumer<OtpCubit, OtpState>(
           listener: (context, state) {
             if (state is OtpSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("✅ Xác minh OTP thành công!")),
-              );
+              Get.snackbar("Thành công", "Đã xác minh otp thành công");
             } else if (state is OtpError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("❌ ${state.message}")),
@@ -41,9 +41,9 @@ class OtpScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Tiêu đề OTP
-                    Text(
+                    const Text(
                       textTitleOtp,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 24,
                         color: Color(0xFFFF4A4A),
@@ -121,7 +121,7 @@ class OtpScreen extends StatelessWidget {
                         ),
                         child: state is OtpLoading
                             ? CircularProgressIndicator(color: Colors.white)
-                            : Text(
+                            : const Text(
                                 "Xác Nhận",
                                 style: TextStyle(
                                   fontSize: 14,
