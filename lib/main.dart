@@ -1,43 +1,5 @@
-import 'package:credit_hub_app/data/repository/account/account_repo.dart';
-import 'package:credit_hub_app/data/repository/account/account_repo_impl.dart';
-import 'package:credit_hub_app/data/repository/account_list/account_list_repo.dart';
-import 'package:credit_hub_app/data/repository/home/home_rep.dart';
-import 'package:credit_hub_app/data/service/account_bank_list/account_bank_service.dart';
-import 'package:credit_hub_app/data/service/account_list/account_service.dart';
-import 'package:credit_hub_app/data/service/account_list/account_service_api.dart';
-import 'package:credit_hub_app/ui/screens/add_account/cubit/add_account_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-
-import 'core/constant/constant.dart';
-import 'core/utils/dependencies.dart';
-import 'data/_base/network_manager.dart';
-import 'data/repository/account_list/account_list_repo_impl.dart';
-import 'data/repository/forgot_password/forgot_password_rep.dart';
-import 'data/repository/forgot_password/forgot_password_rep_impl.dart';
-import 'data/repository/home/home_rep_impl.dart';
-import 'data/repository/otp/otp_repo.dart';
-import 'data/repository/otp/otp_repo_impl.dart';
-import 'data/service/forgot_password/forgot_password_service.dart';
-import 'data/service/home/home_service.dart';
-import 'data/service/otp/otp_service.dart';
-import 'shared/app_manager.dart';
-import 'shared/app_route.dart';
-import 'ui/screens/add_withdrawal_request/cubit/add_withdrawal_request_cubit.dart';
-import 'ui/screens/forgot_password/cubit/forgot_password_cubit.dart';
-import 'ui/screens/home/cubit/home_cubit.dart';
-import 'ui/screens/list_account_screen/cubit/list_account_cubit_cubit.dart';
-import 'ui/screens/otp/cubit/otp_cubit.dart';
-import 'ui/screens/request/cubit/request_cubit.dart';
-import 'ui/screens/sign_in/sign_in.dart';
-
-// 🔥 Import liên quan đến RequestCubit
-import 'data/repository/request/request_repo.dart';
-import 'data/repository/request/request_repo_impl.dart';
-import 'data/service/request/request_service.dart';
-
+import 'main_barrel.dart';
 /// 📌 **Hàm main - Điểm khởi chạy ứng dụng**
 Future<void> main() async {
   // ✅ Khởi tạo Flutter binding
