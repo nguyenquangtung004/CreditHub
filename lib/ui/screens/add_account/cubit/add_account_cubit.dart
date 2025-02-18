@@ -1,29 +1,32 @@
 import 'package:bloc/bloc.dart';
-import 'package:credit_hub_app/data/model/account/account.dart';
-import 'package:credit_hub_app/data/model/bank/bank_model.dart';
-import '../../../../data/_base/base_reponse.dart';
-import '../../../../data/repository/account_list/account_list_repo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../add_account_barrel.dart';
 
 part 'add_account_state.dart';
 
 class AddAccountCubit extends Cubit<AddAccountState> {
+  /* ------------------------------ Phần khởi tạo ----------------------------- */
   final AccountListRepo accountListRepo;
+  String selectedBankText = "Techcombank"; // ✅ Tên ngân hàng mặc định
+  int? selectedBankId; // ✅ ID ngân hàng đã chọn
 
   AddAccountCubit({required this.accountListRepo}) : super(AddAccountInitial());
 
-  /// ✅ Lấy danh sách ngân hàng từ api -> Trong Bottom Sheet
+  /* --------------------- Lấy danh sách ngân hàng từ api --------------------- */
   Future<void> fetchBank() async {
     emit(AddAccountLoading());
     try {
       print("Step 1: Gửi yêu cầu lấy danh sách ngân hàng...");
-      final BaseResponse<List<BankModel>> response = await accountListRepo.fetchBank();
+      final BaseResponse<List<BankModel>> response =
+          await accountListRepo.fetchBank();
       print("Step 2: API phản hồi: ${response.toJson}");
 
       if (response.data != null && response.data!.isNotEmpty) {
-        print("Step True 3: ✅ API trả về danh sách ngân hàng: ${response.data!.length}");
-        emit(BankLoaded(banks: response.data!)); // ✅ Trả về danh sách ngân hàng
+        print(
+            "Step 3: ✅ API trả về danh sách ngân hàng: ${response.data!.length}");
+        emit(BankLoaded(banks: response.data!));
       } else {
-        print("Step False 3:⚠️ Không có dữ liệu ngân hàng.");
+        print("Step 3: ⚠️ Không có dữ liệu ngân hàng.");
         emit(BankError(message: 'Không có dữ liệu ngân hàng.'));
       }
     } catch (e) {
@@ -31,16 +34,15 @@ class AddAccountCubit extends Cubit<AddAccountState> {
       emit(BankError(message: "Lỗi khi tải danh sách ngân hàng: $e"));
     }
   }
-
-  /// ✅ Thêm tài khoản ngân hàng
+  /* ----------------------- Tạo tài khoản ngân hàng mới ---------------------- */
   Future<void> createBankAccount({
     required int bankId,
     required String bankAccount,
     required String bankOwner,
   }) async {
     if (bankId == 0 || bankAccount.isEmpty || bankOwner.isEmpty) {
-      print("⚠️ Thông tin nhập chưa đầy đủ.");
-      emit(AddAccountError(message: "Vui lòng nhập đầy đủ thông tin tài khoản!"));
+      emit(AddAccountError(
+          message: "Vui lòng nhập đầy đủ thông tin tài khoản!"));
       return;
     }
 
@@ -50,64 +52,17 @@ class AddAccountCubit extends Cubit<AddAccountState> {
       "bank_owner": bankOwner,
     };
 
-    print("📡 Gửi yêu cầu tạo tài khoản ngân hàng: $requestData");
-
     try {
       final response = await accountListRepo.addAccountBank(requestData);
-      print("📥 API phản hồi: ${response.toJson}");
 
       if (response.status == 200) {
-        print("✅ Thêm tài khoản thành công!");
-        emit(AddAccountSuccess(message: "Tài khoản ngân hàng đã được thêm thành công!"));
+        emit(AddAccountSuccess(
+            message: "Tài khoản ngân hàng đã được thêm thành công!"));
       } else {
-        print("❌ Lỗi API khi tạo tài khoản: ${response.message}");
-        emit(AddAccountError(message: response.message ?? "Có lỗi xảy ra từ API!"));
+        emit(AddAccountError(message: response.message ?? "Có lỗi xảy ra!"));
       }
     } catch (e) {
-      print("❌ Exception khi thêm tài khoản: $e");
-      emit(AddAccountError(message: "Không thể thêm tài khoản! Lỗi: $e"));
+      emit(AddAccountError(message: "Lỗi khi thêm tài khoản!"));
     }
   }
-
-  // /// ✅ Lấy danh sách tài khoản ngân hàng
-  // Future<void> fetchAccountBank(int pageNo, int pageSize) async {
-  //   emit(AddAccountLoading());
-  //   try {
-  //     print("📡 Gửi yêu cầu lấy danh sách tài khoản ngân hàng...");
-  //     await Future.delayed(Duration(seconds: 2)); // Mô phỏng delay API
-
-  //     final params = PaginationParams(pageNo: pageNo, pageSize: pageSize);
-  //     print("🔎 Tham số request: pageNo=$pageNo, pageSize=$pageSize");
-
-  //     final BaseResponse<PaginationResponse<AccountBank>> response =
-  //         await accountListRepo.fetchAccountBank(params: params);
-
-  //     print("📥 API phản hồi: ${response.toJson}");
-
-  //     if (response.status == 200 && response.data != null) {
-  //       final List<AccountBank> newData = response.data!.data;
-  //       print("✅ API trả về ${newData.length} tài khoản.");
-
-  //       List<AccountBank> updatedList;
-
-  //       if (state is! LoadedDataBankAccount || pageNo == 1) {
-  //         updatedList = newData; // Nếu là page đầu tiên hoặc chưa có dữ liệu thì gán mới
-  //       } else {
-  //         updatedList = [
-  //           ...(state as LoadedDataBankAccount).accountBank,
-  //           ...newData
-  //         ]; // Nếu có sẵn dữ liệu, append thêm dữ liệu mới
-  //       }
-
-  //       print("📌 Tổng số tài khoản sau khi cập nhật: ${updatedList.length}");
-  //       emit(LoadedDataBankAccount(accountBank: updatedList)); // ✅ Emit state đúng
-  //     } else {
-  //       print("⚠️ API không trả về dữ liệu hợp lệ.");
-  //       emit(AddAccountError(message: 'API không trả về dữ liệu hợp lệ.'));
-  //     }
-  //   } catch (e) {
-  //     print("❌ Exception khi fetch tài khoản ngân hàng: $e");
-  //     emit(AddAccountError(message: "Lỗi khi lấy danh sách tài khoản: $e"));
-  //   }
-  // }
 }
