@@ -44,8 +44,3 @@ class LoadedDataBankAccount extends AddAccountState {
   LoadedDataBankAccount({required this.accountBank});
   
 }
-class BankSelected extends AddAccountState {
-  final int bankId;
-  final String bankName;
-  BankSelected({required this.bankId, required this.bankName});
-}

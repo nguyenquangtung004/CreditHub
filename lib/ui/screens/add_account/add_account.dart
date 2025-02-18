@@ -1,10 +1,15 @@
 import 'dart:ui';
-
+import 'package:credit_hub_app/core/components/text_field/app_text_field.dart';
+import 'package:credit_hub_app/core/constant/app_string.dart';
+import 'package:credit_hub_app/core/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:credit_hub_app/ui/screens/add_account/cubit/add_account_cubit.dart';
 
-import 'add_account_barrel.dart';
+import '../../../data/repository/account_list/account_list_repo.dart';
+import '../../widgets/add_account/custom_dropdown_button.dart';
+import '../../widgets/add_account/item_drop_down.dart';
 
 class AddAccountScreen extends StatefulWidget {
   const AddAccountScreen({super.key});
@@ -14,13 +19,14 @@ class AddAccountScreen extends StatefulWidget {
 }
 
 class _AddAccountScreenState extends State<AddAccountScreen> {
-  /* ---------------------------- Khởi tạo các biến --------------------------- */
   final TextEditingController accountController = TextEditingController();
   final TextEditingController nameAccountController = TextEditingController();
-  String selectedBankText = "Techcombank";// Giá trị ngân hàng đang chọn
+
+  // Giá trị ngân hàng đang chọn
+  String selectedBankText = "Techcombank";
+
   int? selectedBankId; // ✅ Lưu ID của ngân hàng đã chọn
 
-  /* ----------------- Xử lý logic khi mở bottomBankSelection ----------------- */
   void _showBankSelectionSheet(BuildContext context) async {
     print("Step 1: Mở BankSelectionSheet...");
     final addAccountCubit = context.read<AddAccountCubit>();
@@ -67,7 +73,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -77,7 +82,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
         return AddAccountCubit(accountListRepo: accountListRepo);
       },
       child: Scaffold(
-        /* --------------------------------- AppBar --------------------------------- */
         appBar: AppBar(
           leading: IconButton(
             onPressed: () => Get.back(),
@@ -95,7 +99,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /* ------------------------------Nhập số tài khoản ------------------------------ */
+                // Số tài khoản
                 RichText(
                   text: const TextSpan(
                     text: titleNumberAccount,
@@ -123,7 +127,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                 ),
                 h(22),
 
-                /* --------------------------- Nhập Tên tài khoản --------------------------- */
+                // Tên tài khoản
                 RichText(
                   text: const TextSpan(
                     text: titleNameAccount,
@@ -151,7 +155,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                 ),
                 h(22),
 
-                /* ----------------------------- Chọn Ngân hàng ----------------------------- */
+                // Ngân hàng
                 RichText(
                   text: const TextSpan(
                     text: titlebank, // "Ngân hàng"
@@ -177,7 +181,8 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   currentValue: selectedBankText,
                   onTap: () => _showBankSelectionSheet(context),
                 ),
-
+                
+                
                 h(144),
                 /* ------------------------------ Nút thêm mới ------------------------------ */
                 SizedBox(
@@ -187,7 +192,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFFF4A4A)),
                     onPressed: () {
-                    
                       if (selectedBankId == null ||
                           accountController.text.isEmpty ||
                           nameAccountController.text.isEmpty) {
@@ -215,4 +219,3 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
     );
   }
 }
-

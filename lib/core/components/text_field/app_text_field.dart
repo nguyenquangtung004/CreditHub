@@ -28,7 +28,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-    
       controller: widget.controller,
       obscureText: _obscureText, // ✅ Thay đổi theo trạng thái
       decoration: InputDecoration(
@@ -36,7 +35,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(50),
           borderSide: BorderSide.none,
         ),
-        floatingLabelBehavior:FloatingLabelBehavior.never, // Ẩn text hiển thị lên đầu text field
         labelText: widget.label,
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
