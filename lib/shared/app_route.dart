@@ -1,14 +1,14 @@
-import 'package:credit_hub_app/ui/screens/add_account.dart';
-import 'package:credit_hub_app/ui/screens/add_withdrawal_request.dart';
-import 'package:credit_hub_app/ui/screens/detail_request.dart';
-import 'package:credit_hub_app/ui/screens/history.dart';
-import 'package:credit_hub_app/ui/screens/list_account_screen.dart';
-import 'package:credit_hub_app/ui/screens/otp_screen.dart';
+import 'package:credit_hub_app/ui/screens/add_account/add_account.dart';
+import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request.dart';
+import 'package:credit_hub_app/ui/screens/detail/detail_request.dart';
+import 'package:credit_hub_app/ui/screens/request/history.dart';
+import 'package:credit_hub_app/ui/screens/list_account_screen/list_account_screen.dart';
+import 'package:credit_hub_app/ui/screens/otp/otp_screen.dart';
 import 'package:credit_hub_app/ui/widgets/bottom_navigator/custom_bottom_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../ui/screens/forgot_password.dart';
+import '../ui/screens/forgot_password/forgot_password.dart';
 import '../ui/screens/sign_in/bloc/cubit/sign_in_cubit.dart';
 import '../ui/screens/sign_in/sign_in.dart'; //NOTE :Thư viện GetX
 
@@ -115,22 +115,6 @@ extension AppRouteExt on AppRoute {
           // ],
           transition: Transition.cupertino,
         );
-      // case AppRoute.customer:
-      //   return GetPageRoute(
-      //     settings: settings,
-      //     page: () => const CustomerScreen(),
-      //     bindings: [BindingsBuilder.put(() => CustomerCubit(Get.find()))],
-      //     transition: Transition.cupertino,
-      //   );
-      // case AppRoute.customerDetail:
-      //   return GetPageRoute(
-      //     settings: settings,
-      //     page: () => const CustomerDetailScreen(),
-      //     bindings: [
-      //       BindingsBuilder.put(() => CustomerDetailCubit(Get.find()))
-      //     ],
-      //     transition: Transition.cupertino,
-      //   );
       case AppRoute.main:
         return GetPageRoute(
           settings: settings,
@@ -168,12 +152,7 @@ extension AppRouteExt on AppRoute {
            
           ),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => NotificationCubit(Get.find())),
-            // BindingsBuilder.put(() => NewsCubit(Get.find()))
+           
           ],
           transition: Transition.cupertino,
         );
@@ -182,20 +161,11 @@ extension AppRouteExt on AppRoute {
             settings.arguments as Map<String, dynamic>?;
         return GetPageRoute(
           settings: settings,
-          page: () => DetailRequestScreen(
-            textstatus: args?['textstatus'] ?? '',
-            lotNumber: args?['lotNumber'] ?? '',
-            dateRequest: args?['dateRequest'] ?? '',
-            lotPrice: args?['lotPrice'] ?? '',
-            imageBill: args?['imageBill'],
+          page: () => DetailRequestScreen(requestId: args?["requestId"], // ✅ Nhận requestId từ arguments
+         
           ),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => NotificationCubit(Get.find())),
-            // BindingsBuilder.put(() => NewsCubit(Get.find()))
+  
           ],
           transition: Transition.cupertino,
         );

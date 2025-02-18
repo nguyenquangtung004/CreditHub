@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class CustomChartLine extends StatelessWidget {
+  const CustomChartLine({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(right: 20.0),
+        margin: const EdgeInsets.only(right: 20.0),
         color: Colors.white,
         child: LineChart(
           LineChartData(
@@ -69,18 +71,18 @@ class CustomChartLine extends StatelessWidget {
             lineBarsData: [
               LineChartBarData(
                 spots: [
-                  FlSpot(0, 3),
-                  FlSpot(1, 6),
-                  FlSpot(2, 7),
-                  FlSpot(3, 4),
-                  FlSpot(4, 5),
-                  FlSpot(5, 3),
-                  FlSpot(6, 6),
-                  FlSpot(7, 8),
-                  FlSpot(8, 7),
+                  const FlSpot(0, 3),
+                  const FlSpot(1, 6),
+                  const FlSpot(2, 7),
+                  const FlSpot(3, 4),
+                  const FlSpot(4, 5),
+                  const FlSpot(5, 3),
+                  const FlSpot(6, 6),
+                  const FlSpot(7, 8),
+                  const FlSpot(8, 7),
                 ],
                 isCurved: true,
-                colors: [Color(0xFFFF4A4A)],
+                colors: [const Color(0xFFFF4A4A)],
                 barWidth: 1.19, // Độ rộng của đường
                 isStrokeCapRound: true,
                 belowBarData: BarAreaData(
@@ -89,8 +91,8 @@ class CustomChartLine extends StatelessWidget {
                   gradientFrom: const Offset(0, 0),
                   gradientTo: const Offset(0, 1),
                   colors: [
-                    Color(0xFFFF4A4A).withOpacity(0.5),
-                    Color(0xFFFF4A4A).withOpacity(0.0),
+                    const Color(0xFFFF4A4A).withOpacity(0.5),
+                    const Color(0xFFFF4A4A).withOpacity(0.0),
                   ],
                 ),
                 dotData: FlDotData(show: true),

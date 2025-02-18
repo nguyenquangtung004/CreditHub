@@ -1,10 +1,14 @@
 import 'package:credit_hub_app/core/constant/constant.dart';
-import 'package:credit_hub_app/ui/widgets/sign_in/custom_button_sign_in.dart';
-import 'package:credit_hub_app/ui/widgets/home/custom_chart.dart';
+import 'package:credit_hub_app/ui/widgets/home/custom_item_home.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../data/_base/bloc/base_bloc_consumer.dart';
+import '../../../data/model/home/apiresponse/api_response.dart';
+import '../../widgets/sign_in/custom_button_sign_in.dart';
+import '../../widgets/home/custom_chart.dart';
 import '../../../core/constant/app_string.dart';
-import '../../widgets/home/custom_list_view_request.dart';
+import '../../../core/constant/app_color.dart';
+import 'cubit/home_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,11 +18,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double _lastOffset = 0.0; // Lưu trạng thái cuộn trước đó
-  bool _showButtons = true; // Kiểm soát hiển thị nút
+  double _lastOffset = 0.0;
+  bool _showButtons = true;
 
   @override
   Widget build(BuildContext context) {
+    final homeCubit = context.read<HomeCubit>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: NotificationListener<ScrollNotification>(
@@ -26,10 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
           if (scrollNotification is ScrollUpdateNotification) {
             setState(() {
               if (scrollNotification.metrics.pixels > _lastOffset) {
-                // Vuốt xuống → Ẩn nút
                 _showButtons = false;
               } else if (scrollNotification.metrics.pixels <= 50) {
-                // Vuốt lên → Hiện lại khi lên đỉnh
                 _showButtons = true;
               }
               _lastOffset = scrollNotification.metrics.pixels;
@@ -39,94 +43,108 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Stack(
           children: [
-            // Giữ headerHome cố định trên màn hình
             Positioned(
               top: 0,
               left: 0,
               right: 0,
-              child: Column(
-                children:
-                    headerHome, // Gọi hàm headerHome để hiển thị phần nền và tiêu đề
-              ),
+              child: Column(children: headerHome),
             ),
 
-            // Nội dung có thể cuộn
+            // Nội dung chính
             Positioned(
-              top: 180, // Bắt đầu cuộn từ sau header
+              top: 180,
               left: 0,
               right: 0,
               bottom: 0,
-              child: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        // Nút bấm sẽ ẩn khi cuộn xuống và hiện khi vuốt lên
-                        AnimatedOpacity(
-                          opacity:
-                              _showButtons ? 1.0 : 0.0, // Kiểm soát hiển thị
-                          duration: const Duration(milliseconds: 300),
-                          child: Container(
-                            height: 90,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  width: 150,
-                                  height: 71,
-                                  child: CustomButtonSignIn(
-                                    text01: "70",
-                                    text02: pendingSettlementRequest,
-                                    onPressed: () => {print("70")},
-                                    color01:
-                                        const Color.fromRGBO(255, 74, 74, 1),
-                                    color02: Colors.black,
-                                    backgroundColor: Colors.white,
+              child: BaseBlocConsumer<HomeCubit, HomeState>(
+                bloc: homeCubit,
+                builder: (context, state) {
+                  if (state is HomeLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.red,
+                      ),
+                    );
+                  } else if (state is HomeLoaded) {
+                    return NestedScrollView(
+                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              AnimatedOpacity(
+                                opacity: _showButtons ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 300),
+                                child: Container(
+                                  height: 90,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        width: 150,
+                                        height: 71,
+                                        child: CustomButtonSignIn(
+                                          text01: "${state.totalRequest}",
+                                          text02: pendingSettlementRequest,
+                                          onPressed: () =>
+                                              {print(state.totalRequest)},
+                                          color01: Colors.red,
+                                          color02: Colors.black,
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      ),
+                                      w(12)
+,                                      Container(
+                                        width: 158,
+                                        height: 72,
+                                        child: CustomButtonSignIn(
+                                          text01:
+                                              "${state.totalMoney.toStringAsFixed(0)}",
+                                          text02: pendingSettlementAmount,
+                                          onPressed: () =>
+                                              {print(state.totalMoney)},
+                                          color01: const Color.fromRGBO(
+                                              255, 187, 36, 1),
+                                          color02: Colors.black,
+                                          backgroundColor: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                w(12),
-                                Container(
-                                  width: 158,
-                                  height: 72,
-                                  child: CustomButtonSignIn(
-                                    text01: "332.248.000",
-                                    text02: pendingSettlementAmount,
-                                    onPressed: () => {print("70")},
-                                    color01:
-                                        const Color.fromRGBO(255, 187, 36, 1),
-                                    color02: Colors.black,
-                                    backgroundColor: Colors.white,
+                              ),
+                              h(10),
+                              const Center(
+                                child: Text(
+                                  salesOverTime,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Container(
+                                height: 220,
+                                color: Colors.white,
+                                width: double.infinity,
+                                child: CustomChartLine(),
+                              ),
+                            ],
                           ),
-                        ),
-
-                        h(10),
-                        const Center(
-                          child: Text(
-                            salesOverTime,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-
-                        Container(
-                          height: 220,
-                          color: Colors.white,
-                          width: double.infinity,
-                          child: CustomChartLine(),
                         ),
                       ],
-                    ),
-                  ),
-                ],
-                body: CustomListViewRequest(), // Danh sách sẽ cuộn được
+                      body:
+                          CustomListViewRequest(lstRequests: state.lstRequests),
+                    );
+                  } else if (state is HomeError) {
+                    return Center(child: Text("Lỗi: ${state.message}"));
+                  } else {
+                    return Center(child: Text("Nhấn để tải dữ liệu!"));
+                  }
+                },
               ),
             ),
           ],
@@ -144,10 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xFFFF4A4A),
-                  Color(0xFFFF754A),
-                ],
+                colors: [Color(0xFFFF4A4A), Color(0xFFFF754A)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -156,13 +171,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Opacity(
             opacity: 0.7,
             child: Image.asset(
-              imagesInfrastructure,
+              "assets/images/images_infrastructure.png",
               height: 250,
               width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
-         
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 60),
             child: Row(
@@ -175,25 +189,72 @@ class _HomeScreenState extends State<HomeScreen> {
                       titleHome,
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          color: Colors.white),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                     ),
                     Text(
                       appName,
                       style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 24,
-                          color: Colors.white),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
-                Image(image: AssetImage(images02), height: 107, width: 142)
+                Image(image: AssetImage(images02), height: 107, width: 142),
               ],
             ),
           ),
         ],
       ),
     ];
+  }
+}
+
+// WIDGET: CustomListViewRequest (Gộp từ custom_list_view_request.dart)
+class CustomListViewRequest extends StatelessWidget {
+  final List<RequestItem> lstRequests;
+
+  const CustomListViewRequest({Key? key, required this.lstRequests})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 17,
+        centerTitle: true,
+        title: Text(
+          recentRequests,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8.0),
+        itemCount: lstRequests.length,
+        itemBuilder: (context, index) {
+          final item = lstRequests[index];
+
+          final LinearGradient gradientColor =
+              statusGradients[item.statusName] ??
+                  LinearGradient(
+                    colors: [Colors.grey, Colors.grey.shade700],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  );
+
+          return CustomItemHome(
+            textstatus: item.statusName,
+            lotNumber: item.lotNo,
+            dateRequest: item.dateRequest,
+            lotPrice: "${item.moneyRequest.toStringAsFixed(0)} đ",
+            gradientColor: gradientColor,
+          );
+        },
+      ),
+    );
   }
 }

@@ -55,14 +55,6 @@ void provideDependencies() {
     );
   }
 
-  // Get.lazyPut<HomeRepository>(
-  //   () => HomeRepositoryImpl(
-  //     repo: HomeServiceApi(
-  //       service: HomeService(Get.find<Dio>()),
-  //     ),
-  //   ),
-  //   fenix: true,
-  // );
 
   print("✅ Tất cả dependency đã được đăng ký!");
 }
