@@ -132,12 +132,16 @@ extension AppRouteExt on AppRoute {
           settings: settings,
           page: () => HistoryScreen(),
           bindings: [
-            // BindingsBuilder.put(() => AccountCubit(Get.find())),
-            // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => ProductCategoryCubit(Get.find())),
-            // BindingsBuilder.put(() => HomeCubit(Get.find(), Get.find())),
-            // BindingsBuilder.put(() => NotificationCubit(Get.find())),
-            // BindingsBuilder.put(() => NewsCubit(Get.find()))
+            BindingsBuilder.put(() => RequestCubit(Get.find())),
+          ],
+          transition: Transition.cupertino,
+        );
+        case AppRoute.requestDetails:
+        return GetPageRoute(
+          settings: settings,
+          page: () => DetailRequestScreen(requestId: Get.find()),
+          bindings: [
+            BindingsBuilder.put(() => RequestCubit(Get.find())),
           ],
           transition: Transition.cupertino,
         );

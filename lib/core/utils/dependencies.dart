@@ -88,10 +88,20 @@ void provideDependencies() {
   if (!Get.isRegistered<RequestRepo>()) {
     print("📌 Đăng ký RequestRepo...");
     Get.lazyPut<RequestRepo>(
-      () => RequestRepoImpl(requestService: Get.find<RequestService>()),
+      () => RequestRepoImpl( requestService: Get.find()),
       fenix: true,
     );
   }
+
+
+// ✅ Đăng ký RequestCubit sau khi RequestRepo đã có
+if (!Get.isRegistered<RequestCubit>()) {
+  print("📌 Đăng ký RequestCubit...");
+  Get.lazyPut<RequestCubit>(
+    () => RequestCubit(Get.find<RequestRepo>()),
+    fenix: true,
+  );
+}
 
   // ✅ Đăng ký DataRepository
   if (!Get.isRegistered<DataRepository>()) {
@@ -170,6 +180,8 @@ void provideDependencies() {
       fenix: true,
     );
   }
+
+  
 
   print("✅ Tất cả dependency đã được đăng ký!");
 }
