@@ -83,6 +83,7 @@ extension AppRouteExt on AppRoute {
           ],
           transition: Transition.cupertino,
         );
+
       case AppRoute.forgotPassword:
         return GetPageRoute(
           settings: settings,
@@ -92,18 +93,18 @@ extension AppRouteExt on AppRoute {
           ],
           transition: Transition.cupertino,
         );
-         case AppRoute.enterOtp:
+
+      case AppRoute.enterOtp:
         return GetPageRoute(
           settings: settings,
-          page: () => const OtpScreen(),
+          page: () => OtpScreen(),
           bindings: [
             BindingsBuilder.put(() => SignInCubit(Get.find(), Get.find()))
           ],
           transition: Transition.cupertino,
         );
-   
-     
-       case AppRoute.accountList:
+
+      case AppRoute.accountList:
         return GetPageRoute(
           settings: settings,
           page: () => const ListAccountScreen(),
@@ -119,7 +120,8 @@ extension AppRouteExt on AppRoute {
           bindings: [
             BindingsBuilder.put(() => HomeCubit(dataRepository: Get.find())),
             BindingsBuilder.put(() => RequestCubit(Get.find())),
-            BindingsBuilder.put(() => AddWithdrawalRequestCubit(requestRepo: Get.find())),
+            BindingsBuilder.put(
+                () => AddWithdrawalRequestCubit(requestRepo: Get.find())),
             // BindingsBuilder.put(() => NotificationCubit(Get.find())),
             // BindingsBuilder.put(() => NewsCubit(Get.find()))
           ],
@@ -128,9 +130,7 @@ extension AppRouteExt on AppRoute {
       case AppRoute.requestHistory:
         return GetPageRoute(
           settings: settings,
-          page: () => HistoryScreen(
-           
-          ),
+          page: () => HistoryScreen(),
           bindings: [
             // BindingsBuilder.put(() => AccountCubit(Get.find())),
             // BindingsBuilder.put(() => UserInfoCubit(Get.find(), Get.find())),
@@ -141,28 +141,22 @@ extension AppRouteExt on AppRoute {
           ],
           transition: Transition.cupertino,
         );
-        case AppRoute.addAccount:
+      case AppRoute.addAccount:
         return GetPageRoute(
           settings: settings,
-          page: () => AddAccountScreen(
-           
-          ),
-          bindings: [
-           
-          ],
+          page: () => AddAccountScreen(),
+          bindings: [],
           transition: Transition.cupertino,
         );
-        case AppRoute.requestDetails:
+      case AppRoute.requestDetails:
         final Map<String, dynamic>? args =
             settings.arguments as Map<String, dynamic>?;
         return GetPageRoute(
           settings: settings,
-          page: () => DetailRequestScreen(requestId: args?["requestId"], // ✅ Nhận requestId từ arguments
-         
+          page: () => DetailRequestScreen(
+            requestId: args?["requestId"], // ✅ Nhận requestId từ arguments
           ),
-          bindings: [
-  
-          ],
+          bindings: [],
           transition: Transition.cupertino,
         );
       default:
