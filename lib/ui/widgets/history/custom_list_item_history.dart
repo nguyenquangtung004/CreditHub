@@ -24,7 +24,7 @@ class CustomListItemHistory extends StatelessWidget {
       dateRequest: historyItem.dateRequestHistory, // 🌟 Lấy từ API
       lotPrice: "${historyItem.moneyRequestHistory} đ", // 🌟 Lấy từ API
       gradientColor: gradientColor1,
-      imageBill: historyItem.imageLinkHistory ?? "https://via.placeholder.com/150", // 🌟 Ảnh mặc định nếu null
+      imageBill: historyItem.imageLinkHistory, // 🌟 Ảnh mặc định nếu null
     );
   }
 }

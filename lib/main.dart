@@ -3,7 +3,6 @@ import 'package:credit_hub_app/data/repository/account/account_repo_impl.dart';
 import 'package:credit_hub_app/data/repository/account_list/account_list_repo.dart';
 import 'package:credit_hub_app/data/repository/home/home_rep.dart';
 import 'package:credit_hub_app/data/service/account_bank_list/account_bank_service.dart';
-import 'package:credit_hub_app/data/service/account_bank_list/account_bank_service_api.dart';
 import 'package:credit_hub_app/data/service/account_list/account_service.dart';
 import 'package:credit_hub_app/data/service/account_list/account_service_api.dart';
 import 'package:credit_hub_app/ui/screens/add_account/cubit/add_account_cubit.dart';
@@ -67,9 +66,11 @@ Future<void> main() async {
 
         /* ----------------------- /// ✅ **Cấu hình Service** ----------------------- */
         RepositoryProvider<HomeService>(create: (context) => HomeService(dio)),
-        RepositoryProvider<ForgotPassWordService>(create: (context) => ForgotPassWordService(dio)),
+        RepositoryProvider<ForgotPassWordService>(
+            create: (context) => ForgotPassWordService(dio)),
         RepositoryProvider<OtpService>(create: (context) => OtpService(dio)),
-        RepositoryProvider<RequestService>(create: (context) => RequestService(dio)), // 🔥 Thêm RequestService
+        RepositoryProvider<RequestService>(
+            create: (context) => RequestService(dio)), // 🔥 Thêm RequestService
         RepositoryProvider<AccountService>(
           create: (context) {
             print("✅ AccountService created!");
@@ -91,39 +92,48 @@ Future<void> main() async {
 
         /* ---------------------- /// ✅ **Cấu hình Repository** --------------------- */
         RepositoryProvider<DataRepository>(
-          create: (context) => DataRepositoryImpl(homeService: context.read<HomeService>()),
+          create: (context) =>
+              DataRepositoryImpl(homeService: context.read<HomeService>()),
         ),
         RepositoryProvider<ForgotPasswordRepo>(
-          create: (context) => ForgotPasswordRepoImpl(context.read<ForgotPassWordService>()),
+          create: (context) =>
+              ForgotPasswordRepoImpl(context.read<ForgotPassWordService>()),
         ),
         RepositoryProvider<OtpRepository>(
           create: (context) => OtpRepositoryImpl(context.read<OtpService>()),
         ),
         RepositoryProvider<RequestRepo>(
-          create: (context) => RequestRepoImpl(requestService: context.read<RequestService>()),
+          create: (context) =>
+              RequestRepoImpl(requestService: context.read<RequestService>()),
         ),
         RepositoryProvider<AccountListRepo>(
           create: (context) {
             print("✅ AccountListRepo created!");
-            return AccountListRepoImpl(accountServiceApi: context.read<AccountServiceApi>());
+            return AccountListRepoImpl(
+                accountServiceApi: context.read<AccountServiceApi>());
           },
         ),
         RepositoryProvider<AccountRepo>(
-          create: (context) => AccountBankImpl(accountService: context.read<AccountBankService>()),
+          create: (context) => AccountBankImpl(
+              accountService: context.read<AccountBankService>()),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           /// ✅ **Cấu hình Cubit**
           BlocProvider<HomeCubit>(
-            create: (context) => HomeCubit(dataRepository: context.read<DataRepository>())..fetchHomeData(),
+            create: (context) =>
+                HomeCubit(dataRepository: context.read<DataRepository>())
+                  ..fetchHomeData(),
           ),
           BlocProvider<ForgotPasswordCubit>(
-            create: (context) => ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
+            create: (context) =>
+                ForgotPasswordCubit(context.read<ForgotPasswordRepo>()),
           ),
           BlocProvider<OtpCubit>(
             create: (context) {
-              final String email = Get.arguments ?? ''; // Lấy email từ màn trước (nếu có)
+              final String email =
+                  Get.arguments ?? ''; // Lấy email từ màn trước (nếu có)
               return OtpCubit(context.read<OtpRepository>(), email: email);
             },
           ),
@@ -131,15 +141,17 @@ Future<void> main() async {
             create: (context) => RequestCubit(context.read<RequestRepo>()),
           ),
           BlocProvider<AddWithdrawalRequestCubit>(
-            create: (context) => AddWithdrawalRequestCubit(requestRepo: context.read<RequestRepo>()),
+            create: (context) => AddWithdrawalRequestCubit(
+                requestRepo: context.read<RequestRepo>()),
           ),
           BlocProvider<AddAccountCubit>(
-            create: (context) => AddAccountCubit(accountListRepo: context.read<AccountListRepo>()),
+            create: (context) => AddAccountCubit(
+                accountListRepo: context.read<AccountListRepo>()),
           ),
           BlocProvider<ListAccountCubit>(
-  create: (context) => ListAccountCubit(accountRepo: context.read<AccountRepo>()),
-),
-
+            create: (context) =>
+                ListAccountCubit(accountRepo: context.read<AccountRepo>()),
+          ),
         ],
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,

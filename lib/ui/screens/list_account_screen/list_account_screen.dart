@@ -16,35 +16,56 @@ class ListAccountScreen extends StatefulWidget {
 }
 
 class _ListAccountScreenState extends State<ListAccountScreen> {
-  int? selectedIndex; // Lưu trữ mục được chọn
+  int? selectedIndex;
   late ScrollController _scrollController;
   int _currentPage = 1;
-  final int _pageSize = 10;
+  // final int _pageSize = 10;
+  bool _isLoadingMore = false; // ✅ Tránh tải dữ liệu nhiều lần
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    
-    // Gọi API lần đầu khi màn hình được tạo
-    context.read<ListAccountCubit>().fetchAccountBank(_currentPage, _pageSize);
+
+    // Gọi API lần đầu
+    context.read<ListAccountCubit>().fetchAccountBank(isRefresh: true);
 
     // Lắng nghe sự kiện cuộn để tải thêm dữ liệu khi vuốt lên
     _scrollController.addListener(_onScroll);
   }
 
+  /// ✅ Xử lý tải thêm dữ liệu khi vuốt lên
   void _onScroll() {
+    final cubit = context.read<ListAccountCubit>();
+
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 100) {
-      // Gọi API khi vuốt lên gần cuối danh sách
-      final cubit = context.read<ListAccountCubit>();
-      if (cubit.state is ListAccountSuc) {
+      if (cubit.state is ListAccountSuc && !_isLoadingMore) {
         final state = cubit.state as ListAccountSuc;
+
+        // ✅ Kiểm tra nếu chưa tải hết trang thì mới gọi API tiếp
         if (_currentPage < state.data.totalPage) {
+          setState(() {
+            _isLoadingMore = true;
+          });
+
           _currentPage++;
-          cubit.fetchAccountBank(_currentPage, _pageSize);
+          cubit.fetchAccountBank().then((_) {
+            setState(() {
+              _isLoadingMore = false; // ✅ Ngừng hiển thị loading khi xong
+            });
+          });
         }
       }
     }
+  }
+
+  /// ✅ Xử lý tải lại danh sách khi vuốt xuống
+  Future<void> _onRefresh() async {
+    setState(() {
+      _currentPage = 1; // ✅ Reset lại số trang về 1
+    });
+
+    await context.read<ListAccountCubit>().fetchAccountBank(isRefresh: true);
   }
 
   @override
@@ -74,82 +95,86 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
               return const Center(child: Text("Không có tài khoản ngân hàng nào."));
             }
 
-            return Stack(
-              children: [
-                ListView.separated(
-                  controller: _scrollController,
-                  itemCount: accountList.length + 1, // Thêm 1 để hiển thị loading khi phân trang
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 5), // Khoảng cách 5px giữa các mục
-                  itemBuilder: (context, index) {
-                    if (index == accountList.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(), // Hiển thị khi tải thêm dữ liệu
+            return RefreshIndicator(
+              onRefresh: _onRefresh, // ✅ Kéo xuống để làm mới
+              child: Stack(
+                children: [
+                  ListView.separated(
+                    controller: _scrollController,
+                    itemCount: accountList.length + (_isLoadingMore ? 1 : 0),
+                    separatorBuilder: (context, index) => const SizedBox(height: 5),
+                    itemBuilder: (context, index) {
+                      if (index == accountList.length) {
+                        return _isLoadingMore
+                            ? const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(), // ✅ Hiển thị loading khi tải thêm dữ liệu
+                                ),
+                              )
+                            : const SizedBox.shrink();
+                      }
+
+                      final account = accountList[index];
+                      return Slidable(
+                        key: ValueKey(account.bankId),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              borderRadius: BorderRadius.circular(10),
+                              onPressed: (context) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Chỉnh sửa: ${account.bankOwner}')),
+                                );
+                              },
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit,
+                              label: 'Sửa',
+                            ),
+                            SlidableAction(
+                              borderRadius: BorderRadius.circular(10),
+                              onPressed: (context) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Xóa: ${account.bankOwner}')),
+                                );
+                              },
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Xóa',
+                            ),
+                          ],
+                        ),
+                        child: ItemAccount(
+                          imageBank: Image.network(account.imageAccountBank ?? "Không xác định được ảnh", fit: BoxFit.cover),
+                          textName: account.bankOwner ?? 'Không xác định được tên khách',
+                          textBank: account.bankName ?? 'Không xác định được ngân hàng',
+                          textNumberBank: account.bankAccount ?? 'Không xác định được số tài khoản',
+                          isSelected: selectedIndex == index,
+                          onSelect: () {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                          },
                         ),
                       );
-                    }
-
-                    final account = accountList[index];
-                    return Slidable(
-                      key: ValueKey(account.bankId),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            borderRadius: BorderRadius.circular(10),
-                            onPressed: (context) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Chỉnh sửa: ${account.bankOwner}')),
-                              );
-                            },
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            icon: Icons.edit,
-                            label: 'Sửa',
-                          ),
-                          SlidableAction(
-                            borderRadius: BorderRadius.circular(10),
-                            onPressed: (context) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Xóa: ${account.bankOwner}')),
-                              );
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Xóa',
-                          ),
-                        ],
-                      ),
-                      child: ItemAccount(
-                        imageBank: Image.network(account.imageAccountBank ?? "Không xác định được ảnh", fit: BoxFit.cover),
-                        textName: account.bankOwner ?? 'Không xác định được tên khách',
-                        textBank: account.bankName ?? 'Không xác định được ngân hàng',
-                        textNumberBank: account.bankAccount ?? 'Không xác định được số tài khoản',
-                        isSelected: selectedIndex == index,
-                        onSelect: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                        },
-                      ),
-                    );
-                  },
-                ),
-                Positioned(
-                  right: 30,
-                  bottom: 30,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.red,
-                    onPressed: () {
-                      Get.toNamed(AppRoute.addAccount.name);
                     },
-                    child: const Icon(Icons.add),
                   ),
-                )
-              ],
+                  Positioned(
+                    right: 30,
+                    bottom: 30,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      onPressed: () {
+                        Get.toNamed(AppRoute.addAccount.name);
+                      },
+                      child: const Icon(Icons.add),
+                    ),
+                  )
+                ],
+              ),
             );
           } else if (state is ListAccountError) {
             return Center(child: Text(state.error));
@@ -167,4 +192,3 @@ class _ListAccountScreenState extends State<ListAccountScreen> {
     super.dispose();
   }
 }
-
