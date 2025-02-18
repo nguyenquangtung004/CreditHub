@@ -1,22 +1,22 @@
 import 'package:credit_hub_app/core/button/app_button.dart';
+import 'package:credit_hub_app/core/components/dialog/app_dialog.dart';
+import 'package:credit_hub_app/core/components/loading/app_loading.dart';
+import 'package:credit_hub_app/core/components/text_field/app_text_field.dart';
+import 'package:credit_hub_app/core/constant/app_string.dart';
 import 'package:credit_hub_app/data/repository/sign_in/sign_in_rep.dart';
+import 'package:credit_hub_app/data/repository/sign_in/sign_in_rep_impl.dart';
+import 'package:credit_hub_app/data/service/sign_in_api.dart';
+import 'package:credit_hub_app/data/service/sign_in_service.dart';
+import 'package:credit_hub_app/ui/screens/sign_in/bloc/cubit/sign_in_cubit.dart';
+import 'package:credit_hub_app/ui/screens/sign_in/bloc/cubit/sign_in_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:credit_hub_app/core/constant/constant.dart';
-import 'package:credit_hub_app/core/components/text_field/app_text_field.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../core/components/dialog/app_dialog.dart';
-import '../../../core/components/loading/app_loading.dart';
-import '../../../core/constant/app_string.dart';
-import '../../../data/service/sign_in_api.dart';
-import '../../../data/service/sign_in_service.dart';
-import '../../../shared/app_manager.dart';
-import '../../../shared/app_route.dart';
-import '../../../data/repository/sign_in/sign_in_rep_impl.dart';
-import 'bloc/cubit/sign_in_cubit.dart';
-import 'bloc/cubit/sign_in_state.dart'; 
+import '../../../main_barrel.dart';
+
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 

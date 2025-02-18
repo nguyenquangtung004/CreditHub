@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
-import 'package:credit_hub_app/data/repository/request/request_repo.dart';
 import 'package:http/http.dart' as http;
-import 'package:credit_hub_app/data/model/add_without/add_without.dart';
+import 'package:credit_hub_app/ui/screens/add_withdrawal_request/add_withdrawal_request_barrel.dart';
 
 part 'add_withdrawal_request_state.dart';
 
@@ -11,8 +10,7 @@ class AddWithdrawalRequestCubit extends Cubit<AddWithdrawalRequestState> {
   final RequestRepo requestRepo;
 
   AddWithdrawalRequestCubit({required this.requestRepo}) : super(Initial());
-
-  /// ✅ **Gửi yêu cầu rút tiền**
+  /* -------------------------- Gửi yêu cầu rút tiền -------------------------- */
   Future<void> addWithdrawalRequest({required AddWithout requestItem}) async {
     emit(Loading()); // ✅ Đánh dấu trạng thái Loading khi bắt đầu
 
@@ -39,7 +37,6 @@ class AddWithdrawalRequestCubit extends Cubit<AddWithdrawalRequestState> {
     }
   }
 
-  /// ✅ **Hàm upload ảnh riêng biệt**
   Future<String?> uploadImage(File imageFile) async {
     emit(UploadingImages()); // ✅ Đánh dấu trạng thái Uploading khi bắt đầu
     try {

@@ -8,7 +8,7 @@ class AccountBank with _$AccountBank {
   const factory AccountBank({
     @JsonKey(name: 'icons') @Default('') String? imageAccountBank,
     @JsonKey(name: "bank_id") @Default(0) int bankId,
-    @JsonKey(name: "bank_account") @Default('') String? bankAccount,
+    @JsonKey(name: "bank_no") @Default('') String? bankAccount,
     @JsonKey(name: "bank_name") @Default('') String? bankName,
     @JsonKey(name: "bank_owner") @Default('') String? bankOwner,
   }) = _AccountBank;

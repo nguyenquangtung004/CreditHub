@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:credit_hub_app/ui/widgets/add_width_drawal_request/custom_rich_text.dart';
 import 'package:credit_hub_app/ui/widgets/add_width_drawal_request/custom_text_field.dart';
@@ -19,8 +20,8 @@ class AddWithDrawalRequestScreen extends StatefulWidget {
       _AddWithDrawalRequestScreenState();
 }
 
-class _AddWithDrawalRequestScreenState
-    extends State<AddWithDrawalRequestScreen> {
+class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen> {
+  /* ------------------- Khai báo các thuộc tính thành phần ------------------- */
   final TextEditingController _lotNoController = TextEditingController();
   final TextEditingController _moneyRequestController = TextEditingController();
   File? _selectedImage; // Ảnh đã chọn
@@ -28,7 +29,7 @@ class _AddWithDrawalRequestScreenState
   final ImagePicker _picker = ImagePicker();
   bool _isUploading = false; // Trạng thái đang tải ảnh lên server
 
-  /// ✅ Chọn ảnh từ thư viện hoặc chụp ảnh và tải lên server ngay lập tức
+  /* ----------------- Chọn ảnh và upload server ngay lập tức ----------------- */
   Future<void> _pickImage(ImageSource source) async {
   final pickedFile = await _picker.pickImage(source: source, imageQuality: 80);
 
@@ -58,28 +59,23 @@ class _AddWithDrawalRequestScreenState
       setState(() {
         _uploadedImageName = fileName; // ✅ Lưu tên file để gửi lên API
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("📷 Ảnh đã tải lên thành công: $_uploadedImageName")),
-      );
+      Get.snackbar("Thành công", "Upload ảnh thành côg lên server $_uploadedImageName");
+    
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("❌ Lỗi upload ảnh: $e")),
-    );
+    Get.snackbar("Lỗi", "Lỗi upload ảnh");
+  
   }
 }
 
-  /// ✅ Gửi yêu cầu rút tiền lên server
+  /* --------------------- Gửi yêu cầu rút tiền lên server -------------------- */
   void _submitRequest() {
     final lotNo = _lotNoController.text.trim();
     final moneyRequest =
         double.tryParse(_moneyRequestController.text.trim()) ?? 0.0;
 
     if (lotNo.isEmpty || moneyRequest <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin hợp lệ!")),
-      );
+      Get.snackbar("Lỗi", "Vui lòng nhập đầy đủ thông tin");
       return;
     }
 
@@ -125,18 +121,13 @@ class _AddWithDrawalRequestScreenState
             setState(() {
               _isUploading = false; // ✅ Dừng loading khi thành công
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("✅ Gửi yêu cầu rút tiền thành công!")),
-              
-            );
+            Get.snackbar("Thành công", "Gửi dữ liệu để quyết toán thành công");
           } else if (state is Failure) {
-            Navigator.pop(context);
+            Get.back();
             setState(() {
               _isUploading = false; // ✅ Dừng loading khi lỗi xảy ra
             });
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text("❌ Lỗi: ${state.error}")),
-            // );
+           
           }
         },
         child: SingleChildScrollView(
@@ -233,7 +224,7 @@ class _AddWithDrawalRequestScreenState
                 leading: const Icon(Icons.photo_library),
                 title: const Text("Chọn từ thư viện"),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.back();
                   _pickImage(ImageSource.gallery);
                 },
               ),
@@ -241,7 +232,7 @@ class _AddWithDrawalRequestScreenState
                 leading: const Icon(Icons.camera_alt),
                 title: const Text("Chụp ảnh"),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.back();
                   _pickImage(ImageSource.camera);
                 },
               ),

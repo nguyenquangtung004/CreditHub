@@ -24,7 +24,7 @@ mixin _$AccountBank {
   String? get imageAccountBank => throw _privateConstructorUsedError;
   @JsonKey(name: "bank_id")
   int get bankId => throw _privateConstructorUsedError;
-  @JsonKey(name: "bank_account")
+  @JsonKey(name: "bank_no")
   String? get bankAccount => throw _privateConstructorUsedError;
   @JsonKey(name: "bank_name")
   String? get bankName => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $AccountBankCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'icons') String? imageAccountBank,
       @JsonKey(name: "bank_id") int bankId,
-      @JsonKey(name: "bank_account") String? bankAccount,
+      @JsonKey(name: "bank_no") String? bankAccount,
       @JsonKey(name: "bank_name") String? bankName,
       @JsonKey(name: "bank_owner") String? bankOwner});
 }
@@ -106,7 +106,7 @@ abstract class _$$AccountBankImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'icons') String? imageAccountBank,
       @JsonKey(name: "bank_id") int bankId,
-      @JsonKey(name: "bank_account") String? bankAccount,
+      @JsonKey(name: "bank_no") String? bankAccount,
       @JsonKey(name: "bank_name") String? bankName,
       @JsonKey(name: "bank_owner") String? bankOwner});
 }
@@ -159,7 +159,7 @@ class _$AccountBankImpl implements _AccountBank {
   const _$AccountBankImpl(
       {@JsonKey(name: 'icons') this.imageAccountBank = '',
       @JsonKey(name: "bank_id") this.bankId = 0,
-      @JsonKey(name: "bank_account") this.bankAccount = '',
+      @JsonKey(name: "bank_no") this.bankAccount = '',
       @JsonKey(name: "bank_name") this.bankName = '',
       @JsonKey(name: "bank_owner") this.bankOwner = ''});
 
@@ -173,7 +173,7 @@ class _$AccountBankImpl implements _AccountBank {
   @JsonKey(name: "bank_id")
   final int bankId;
   @override
-  @JsonKey(name: "bank_account")
+  @JsonKey(name: "bank_no")
   final String? bankAccount;
   @override
   @JsonKey(name: "bank_name")
@@ -226,7 +226,7 @@ abstract class _AccountBank implements AccountBank {
   const factory _AccountBank(
           {@JsonKey(name: 'icons') final String? imageAccountBank,
           @JsonKey(name: "bank_id") final int bankId,
-          @JsonKey(name: "bank_account") final String? bankAccount,
+          @JsonKey(name: "bank_no") final String? bankAccount,
           @JsonKey(name: "bank_name") final String? bankName,
           @JsonKey(name: "bank_owner") final String? bankOwner}) =
       _$AccountBankImpl;
@@ -241,7 +241,7 @@ abstract class _AccountBank implements AccountBank {
   @JsonKey(name: "bank_id")
   int get bankId;
   @override
-  @JsonKey(name: "bank_account")
+  @JsonKey(name: "bank_no")
   String? get bankAccount;
   @override
   @JsonKey(name: "bank_name")
