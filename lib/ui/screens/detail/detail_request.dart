@@ -91,15 +91,16 @@ class DetailRequestScreen extends StatelessWidget {
                             width: 270,
                             height: 65,
                             child: ElevatedButton(
+                              
                               onPressed: () {
                                 Get.toNamed(AppRoute.addWithdrawalRequest.name);
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: const Color(0xFFFF4A4A),
                                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(32.5),
                                 ),
+                                backgroundColor: Colors.red
                               ),
                               child: const Text(
                                 "Yêu cầu lại",

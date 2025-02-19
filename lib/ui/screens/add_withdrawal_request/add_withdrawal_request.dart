@@ -189,7 +189,7 @@ class _AddWithDrawalRequestScreenState extends State<AddWithDrawalRequestScreen>
                 child: ElevatedButton(
                   onPressed: _submitRequest,
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFFFF4A4A),
+                    backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 20),
                     shape: RoundedRectangleBorder(

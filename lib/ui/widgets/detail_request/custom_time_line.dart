@@ -1,6 +1,5 @@
-import 'package:credit_hub_app/core/constant/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 class CustomTimeline extends StatelessWidget {
   final String textstatus; // Nhận trạng thái từ bên ngoài
@@ -47,23 +46,25 @@ class CustomTimeline extends StatelessWidget {
           // Cột trái: Đường kẻ và chấm tròn
           Flexible(
             flex: 1,
-            child: FixedTimeline.tileBuilder(
-              direction: Axis.vertical,
+            child: Timeline.tileBuilder(
+              theme: TimelineThemeData(
+                direction: Axis.vertical,
+              ),
               builder: TimelineTileBuilder.connected(
+                connectionDirection: ConnectionDirection.before,
                 connectorBuilder: (context, index, type) {
                   return SolidLineConnector(
                     color: index == displayedEvents.length - 1
-                        ? Color(0xFFFF4A4A)
-                        : Color(0xFFFDCECB),
+                        ? const Color(0xFFFF4A4A)
+                        : const Color(0xFFFDCECB),
                     thickness: 2.0,
                   );
                 },
                 indicatorBuilder: (context, index) {
                   return DotIndicator(
-                    
                     color: index == displayedEvents.length - 1
-                        ? Color(0xFFFF4A4A)
-                        : Color(0xFFFDCECB),
+                        ? const Color(0xFFFF4A4A)
+                        : const Color(0xFFFDCECB),
                     size: 16.0,
                   );
                 },
@@ -74,7 +75,7 @@ class CustomTimeline extends StatelessWidget {
               ),
             ),
           ),
-          w(14.0),
+          const SizedBox(width: 14.0), // Thay thế w(14.0)
           // Cột phải: Nội dung
           Flexible(
             flex: 3,
@@ -99,10 +100,10 @@ class CustomTimeline extends StatelessWidget {
                               : Colors.black,
                         ),
                       ),
-                      // h(4.0),
+                      const SizedBox(height: 4.0),
                       Text(
                         displayedTimestamps[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12.0,
                           color: Colors.grey,
                         ),

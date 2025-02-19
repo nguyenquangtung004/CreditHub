@@ -14,52 +14,79 @@ class CustomChartLine extends StatelessWidget {
           LineChartData(
             gridData: FlGridData(show: false),
             titlesData: FlTitlesData(
-              bottomTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 22,
-                interval: 1,
-                getTextStyles: (context, value) => const TextStyle(
-                  color: Colors.black,
-                  fontSize: 8,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 22,
+                  interval: 1,
+                  getTitlesWidget: (value, meta) {
+                    const style = TextStyle(
+                      color: Colors.black,
+                      fontSize: 8,
+                    );
+                    Widget text;
+                    switch (value.toInt()) {
+                      case 0:
+                        text = const Text('Jan', style: style);
+                        break;
+                      case 1:
+                        text = const Text('Feb', style: style);
+                        break;
+                      case 2:
+                        text = const Text('Mar', style: style);
+                        break;
+                      case 3:
+                        text = const Text('Apr', style: style);
+                        break;
+                      case 4:
+                        text = const Text('May', style: style);
+                        break;
+                      case 5:
+                        text = const Text('Jun', style: style);
+                        break;
+                      case 6:
+                        text = const Text('Jul', style: style);
+                        break;
+                      case 7:
+                        text = const Text('Aug', style: style);
+                        break;
+                      case 8:
+                        text = const Text('Sep', style: style);
+                        break;
+                      default:
+                        text = const Text('', style: style);
+                        break;
+                    }
+                    return SideTitleWidget(
+                      fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
+                      space: 4.0,
+                      meta: meta,
+                      child: text,
+                    );
+                  },
                 ),
-                getTitles: (value) {
-                  switch (value.toInt()) {
-                    case 0:
-                      return 'Jan';
-                    case 1:
-                      return 'Feb';
-                    case 2:
-                      return 'Mar';
-                    case 3:
-                      return 'Apr';
-                    case 4:
-                      return 'May';
-                    case 5:
-                      return 'Jun';
-                    case 6:
-                      return 'Jul';
-                    case 7:
-                      return 'Aug';
-                    case 8:
-                      return 'Sep';
-                    default:
-                      return '';
-                  }
-                },
               ),
-              leftTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 28,
-                interval: 1,
-                getTextStyles: (context, value) => const TextStyle(
-                  color: Colors.black,
-                  fontSize: 6,
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 28,
+                  interval: 1,
+                  getTitlesWidget: (value, meta) {
+                    const style = TextStyle(
+                      color: Colors.black,
+                      fontSize: 6,
+                    );
+                    return Text(value.toString(), style: style);
+                  },
                 ),
               ),
-              rightTitles: SideTitles(showTitles: false),
-              topTitles: SideTitles(showTitles: false),
-
-                          ),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
             borderData: FlBorderData(
               show: true,
               border: Border.all(color: Colors.white, width: 1),
@@ -70,30 +97,31 @@ class CustomChartLine extends StatelessWidget {
             maxY: 10,
             lineBarsData: [
               LineChartBarData(
-                spots: [
-                  const FlSpot(0, 3),
-                  const FlSpot(1, 6),
-                  const FlSpot(2, 7),
-                  const FlSpot(3, 4),
-                  const FlSpot(4, 5),
-                  const FlSpot(5, 3),
-                  const FlSpot(6, 6),
-                  const FlSpot(7, 8),
-                  const FlSpot(8, 7),
+                spots: const [
+                  FlSpot(0, 3),
+                  FlSpot(1, 6),
+                  FlSpot(2, 7),
+                  FlSpot(3, 4),
+                  FlSpot(4, 5),
+                  FlSpot(5, 3),
+                  FlSpot(6, 6),
+                  FlSpot(7, 8),
+                  FlSpot(8, 7),
                 ],
                 isCurved: true,
-                colors: [const Color(0xFFFF4A4A)],
-                barWidth: 1.19, // Độ rộng của đường
+                color: const Color(0xFFFF4A4A),
+                barWidth: 1.19,
                 isStrokeCapRound: true,
                 belowBarData: BarAreaData(
                   show: true,
-                  // Thêm gradient vào đây
-                  gradientFrom: const Offset(0, 0),
-                  gradientTo: const Offset(0, 1),
-                  colors: [
-                    const Color(0xFFFF4A4A).withOpacity(0.5),
-                    const Color(0xFFFF4A4A).withOpacity(0.0),
-                  ],
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFFF4A4A).withOpacity(0.5),
+                      const Color(0xFFFF4A4A).withOpacity(0.0),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
                 dotData: FlDotData(show: true),
               ),

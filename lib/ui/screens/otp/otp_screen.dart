@@ -112,7 +112,7 @@ class OtpScreen extends StatelessWidget {
                                     .verifyOtp("1234"); // Giả sử nhập OTP
                               },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
+                          backgroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 20),
                           shape: RoundedRectangleBorder(
